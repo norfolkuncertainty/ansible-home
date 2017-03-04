@@ -1,0 +1,60 @@
+#!/usr/bin/env ansible-playbook
+---
+- hosts: all
+  remote_user: "{{ username }}"
+  become: true
+  become_method: "{{ becomemethod }}"
+
+  vars_prompt:
+    - name: username
+      prompt: "User to connect with"
+      private: false
+      default: "dave"
+
+    - name: becomemethod
+      prompt: "Become method"
+      private: false
+      default: "sudo"
+
+  tasks:
+    - group:
+        name: "dave"
+        gid: 652900
+
+    - user:
+       name: dave
+       comment: "Dave"
+       uid: 652900
+       group: 652900
+       home: "/home/dave"
+       shell: "/bin/bash"
+       password: "{{ encrypted password }}"
+
+
+    - name: Add auth key
+      authorized_key:
+        user: dave
+        key: "{{ lookup('file', '/home/dave/.ssh/id_rsa.pub') }}"
+       
+    - name: Delete alarm user
+      user:
+        name: alarm
+        state: absent
+
+    - name: Update pacman cach
+      pacman:
+        update_cache: true
+        upgrade: true
+
+    - name: Install sudo
+      pacman:
+        name: "sudo"
+
+    - name: Allow dave to have sudo
+      lineinfile:
+        dest: /etc/sudoers.d/10_dave
+        state: present
+        create: true
+        line: 'dave ALL=(ALL) ALL'
+        validate: visudo -cf %s
+
