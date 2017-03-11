@@ -4,9 +4,13 @@
   become: true
 
   tasks:
+    - name: Set fsck on boot
+      debug:
+        msg: TODO - Set fsck on boot
+
     - name: set correct mirror for pacman
       debug:
-        msg: Remember to set mirror
+        msg: TODO - Set mirror
 
     - name: update pacman cache
       pacman: 
@@ -25,4 +29,11 @@
         - sudo 
         - screen
 
-    
+    - name: Install X packages
+      pacman: name={{ item }} state=present
+      with_items:
+        - xorg-server
+        - fluxbox
+        - lxdm
+        - xf86-video-fbdev
+ 
