@@ -4,16 +4,25 @@
   become: true
 
   tasks:
-    - name: Install packages
-      pacman:
-        state: present
-        with_items:
-          - dnsutils 
-          - net-tools 
-          - rsync 
-          - sysstat 
-          - atop 
-          - openssh 
-          - vim 
-          - sudo 
-          - screen
+    - name: set correct mirror for pacman
+      debug:
+        msg: Remember to set mirror
+
+    - name: update pacman cache
+      pacman: 
+        update_cache: true
+
+    - name: Install base packages
+      pacman: name={{ item }} state=present
+      with_items:
+        - bind-tools
+        - net-tools 
+        - rsync 
+        - sysstat 
+        - atop 
+        - openssh 
+        - vim 
+        - sudo 
+        - screen
+
+    
