@@ -1,0 +1,19 @@
+#!/usr/bin/env ansible-playbook
+---
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Install packages
+      pacman:
+        state: present
+        with_items:
+          - dnsutils 
+          - net-tools 
+          - rsync 
+          - sysstat 
+          - atop 
+          - openssh 
+          - vim 
+          - sudo 
+          - screen
