@@ -47,6 +47,7 @@
       pacman: name={{ item }} state=present
       with_items:
         - bind-tools
+        - git
         - net-tools 
         - netctl
         - rsync 
@@ -83,9 +84,25 @@
         - dialog
         - xscreensaver
 
+    - name: Install build packages
+      pacman: 
+        name: base-devel 
+        
+       
+
+    - name: Install bluetooth packages
+      pacman: name={{ item }} state=present
+      with_items:
+        - bluez
+        - bluez-utils
+
+    - name: enable bluetooth service
+      debug: 
+        msg: TODO enable bluetooth service
+
     - name: Install AUR packages
       debug: 
-        msg: TODO install AUR package
+        msg: TODO install AUR package netctltray, yaourt, package-query, pi-bluetooth
 
     - name: Start/Enable lxdm
       service: 
