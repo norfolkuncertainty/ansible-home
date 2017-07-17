@@ -65,6 +65,9 @@
         - fluxbox
         - lxdm
         - xf86-video-fbdev
+        - xorg-xmodmap
+        - xorg-xev
+        - xorg-xbacklight
 
     - name: Install desktop packages
       pacman: name={{ item }} state=present
@@ -84,12 +87,17 @@
         - vlc
         - dialog
         - xscreensaver
+        - redshift
+        - python-gobject 
+        - python-xdg 
+        - librsvg
+        - sshfs
+        - cbatticon
+        - geeqie
 
     - name: Install build packages
       pacman: 
         name: base-devel 
-        
-       
 
     - name: Install bluetooth packages
       pacman: name={{ item }} state=present
@@ -103,7 +111,7 @@
 
     - name: Install AUR packages
       debug: 
-        msg: TODO install AUR package netctltray, yaourt, package-query, pi-bluetooth
+        msg: TODO install AUR package netctltray, clipit, skypeforlinux-bin, pi-bluetooth
 
     - name: Start/Enable lxdm
       service: 
