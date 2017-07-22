@@ -1,0 +1,14 @@
+---
+# vars file for base
+base_packages:
+   - bind-tools
+   - git
+   - net-tools 
+   - netctl
+   - rsync 
+   - sysstat 
+   - atop 
+   - openssh 
+   - vim 
+   - sudo 
+   - screen

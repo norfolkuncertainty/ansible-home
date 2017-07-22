@@ -1,0 +1,32 @@
+---
+- name: set correct mirror for pacman
+  debug:
+    msg: TODO - Set mirror
+  become: true
+
+- name: update pacman cache
+  pacman: 
+    update_cache: true
+  become: true
+
+- name: Set timezone
+  file:
+    state: link
+    src: /usr/share/zoneinfo/Pacific/Auckland
+    path: /etc/localtime
+    force: true
+  become: true
+
+- name: Generate NZ locale
+  locale_gen:
+    name: en_NZ.UTF-8
+  become: true
+
+- name: Copy locale.conf across
+  copy:
+    dest: /etc/locale.conf
+    content: "LANG=en_NZ.UTF-8\n"
+    mode: 644
+    owner: root
+    group: root
+  become: true

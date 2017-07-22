@@ -1,0 +1,5 @@
+---
+# tasks file for base
+- include: config.yml
+- include: packages.yml
+- include: services.yml
