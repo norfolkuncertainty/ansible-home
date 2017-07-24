@@ -16,89 +16,89 @@
       debug:
         msg: TODO - create swapfile
 
-    - name: set correct mirror for pacman
-      debug:
-        msg: TODO - Set mirror
+#    - name: set correct mirror for pacman
+#      debug:
+#        msg: TODO - Set mirror
+#
+#    - name: update pacman cache
+#      pacman: 
+#        update_cache: true
+#
+#    - name: Set timezone
+#      file:
+#        state: link
+#        src: /usr/share/zoneinfo/Pacific/Auckland
+#        path: /etc/localtime
+#        force: true
+#
+#    - name: Generate NZ locale
+#      locale_gen:
+#        name: en_NZ.UTF-8
+#
+#    - name: Copy locale.conf across
+#      copy:
+#        dest: /etc/locale.conf
+#        content: "LANG=en_NZ.UTF-8\n"
+#        mode: 644
+#        owner: root
+#        group: root
+#
+#    - name: Install base packages
+#      pacman: name={{ item }} state=present
+#      with_items:
+#        - bind-tools
+#        - git
+#        - net-tools 
+#        - netctl
+#        - rsync 
+#        - sysstat 
+#        - atop 
+#        - openssh 
+#        - vim 
+#        - sudo 
+#        - screen
 
-    - name: update pacman cache
-      pacman: 
-        update_cache: true
+#    - name: Install X packages
+#      pacman: name={{ item }} state=present
+#      with_items:
+#        - xorg-server
+#        - fluxbox
+#        - lxdm
+#        - xf86-video-fbdev
+#        - xorg-xmodmap
+#        - xorg-xev
+#        - xorg-xbacklight
+#
+#    - name: Install desktop packages
+#      pacman: name={{ item }} state=present
+#      with_items:
+#        - chromium
+#        - volumeicon
+#        - gkrellm
+#        - firefox
+#        - icedtea-web
+#        - evince
+#        - terminator
+#        - android-tools
+#        - ansible
+#        - imagemagick
+#        - ttf-dejavu
+#        - pulseaudio
+#        - vlc
+#        - dialog
+#        - xscreensaver
+#        - redshift
+#        - python-gobject 
+#        - python-xdg 
+#        - librsvg
+#        - sshfs
+#        - cbatticon
+#        - geeqie
 
-    - name: Set timezone
-      file:
-        state: link
-        src: /usr/share/zoneinfo/Pacific/Auckland
-        path: /etc/localtime
-        force: true
-
-    - name: Generate NZ locale
-      locale_gen:
-        name: en_NZ.UTF-8
-
-    - name: Copy locale.conf across
-      copy:
-        dest: /etc/locale.conf
-        content: "LANG=en_NZ.UTF-8\n"
-        mode: 644
-        owner: root
-        group: root
-
-    - name: Install base packages
-      pacman: name={{ item }} state=present
-      with_items:
-        - bind-tools
-        - git
-        - net-tools 
-        - netctl
-        - rsync 
-        - sysstat 
-        - atop 
-        - openssh 
-        - vim 
-        - sudo 
-        - screen
-
-    - name: Install X packages
-      pacman: name={{ item }} state=present
-      with_items:
-        - xorg-server
-        - fluxbox
-        - lxdm
-        - xf86-video-fbdev
-        - xorg-xmodmap
-        - xorg-xev
-        - xorg-xbacklight
-
-    - name: Install desktop packages
-      pacman: name={{ item }} state=present
-      with_items:
-        - chromium
-        - volumeicon
-        - gkrellm
-        - firefox
-        - icedtea-web
-        - evince
-        - terminator
-        - android-tools
-        - ansible
-        - imagemagick
-        - ttf-dejavu
-        - pulseaudio
-        - vlc
-        - dialog
-        - xscreensaver
-        - redshift
-        - python-gobject 
-        - python-xdg 
-        - librsvg
-        - sshfs
-        - cbatticon
-        - geeqie
-
-    - name: Install build packages
-      pacman: 
-        name: base-devel 
-
+#    - name: Install build packages
+#      pacman: 
+#        name: base-devel 
+#
     - name: Install bluetooth packages
       pacman: name={{ item }} state=present
       with_items:
@@ -109,13 +109,14 @@
       debug: 
         msg: TODO enable bluetooth service
 
-    - name: Install AUR packages
-      debug: 
-        msg: TODO install AUR package netctltray, clipit, skypeforlinux-bin, pi-bluetooth
-
-    - name: Start/Enable lxdm
-      service: 
-        name: lxdm
-        enabled: true
-        state: started
-
+#    - name: Install AUR packages
+#      debug: 
+#        msg: TODO install AUR package netctltray, clipit, skypeforlinux-bin, pi-bluetooth
+#
+#    - name: Start/Enable lxdm
+#      service: 
+#        name: lxdm
+#        enabled: true
+#        state: started
+#
+#

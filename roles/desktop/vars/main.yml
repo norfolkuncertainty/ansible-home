@@ -1,0 +1,33 @@
+---
+# vars file for desktop
+desktop_packages:
+  - chromium
+  - volumeicon
+  - gkrellm
+  - firefox
+  - icedtea-web
+  - evince
+  - terminator
+  - android-tools
+  - ansible
+  - imagemagick
+  - ttf-dejavu
+  - pulseaudio
+  - vlc
+  - dialog
+  - xscreensaver
+  - redshift
+  - python-gobject 
+  - python-xdg 
+  - librsvg
+  - sshfs
+  - cbatticon
+  - geeqie
+x_packages:
+  - xorg-server
+  - fluxbox
+  - lxdm
+  - xf86-video-fbdev
+  - xorg-xmodmap
+  - xorg-xev
+  - xorg-xbacklight

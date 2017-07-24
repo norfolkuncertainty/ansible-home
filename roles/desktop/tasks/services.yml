@@ -1,0 +1,6 @@
+---
+- name: Start/Enable lxdm
+  service: 
+    name: lxdm
+    enabled: true
+    state: started
