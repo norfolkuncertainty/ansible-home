@@ -27,7 +27,6 @@ x_packages:
   - xorg-server
   - fluxbox
   - lxdm
-  - xf86-video-fbdev
   - xorg-xmodmap
   - xorg-xev
   - xorg-xbacklight
