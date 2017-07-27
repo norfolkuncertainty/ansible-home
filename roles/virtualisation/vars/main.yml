@@ -1,0 +1,5 @@
+---
+# vars file for virtualisation
+qemu_packages:
+  - qemu
+  - virt-manager
