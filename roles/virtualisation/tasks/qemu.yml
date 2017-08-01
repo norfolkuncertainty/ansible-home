@@ -3,3 +3,10 @@
   pacman: name={{ item }} state=present
   with_items: "{{ qemu_packages }}"
   become: true
+
+- name: start libvirtd
+  service: 
+    name: libvirtd
+    state: started
+    enabled: true
+  become: true

@@ -3,3 +3,5 @@
 qemu_packages:
   - qemu
   - virt-manager
+  - ebtables
+  - dnsmasq
