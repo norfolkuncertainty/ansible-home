@@ -23,6 +23,7 @@ desktop_packages:
   - sshfs
   - cbatticon
   - geeqie
+  - libreoffice
 x_packages:
   - xorg-server
   - fluxbox
