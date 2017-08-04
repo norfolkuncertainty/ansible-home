@@ -5,3 +5,5 @@ qemu_packages:
   - virt-manager
   - ebtables
   - dnsmasq
+vagrant_packages:
+  - vagrant

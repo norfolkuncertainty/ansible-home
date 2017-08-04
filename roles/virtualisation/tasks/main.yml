@@ -1,3 +1,4 @@
 ---
 # tasks file for virtualisation
 - include: qemu.yml
+- include: vagrant.yml

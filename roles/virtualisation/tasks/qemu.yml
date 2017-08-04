@@ -10,3 +10,7 @@
     state: started
     enabled: true
   become: true
+
+- name: Add dave to libvirt group
+  debug: 
+    msg: TODO Add dave to libvirt group

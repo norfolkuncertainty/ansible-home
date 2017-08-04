@@ -1,0 +1,5 @@
+---
+- name: Install vagrant and plugin dependencies
+  pacman: name={{ item }} state=present
+  with_items: "{{ vagrant_packages }}"
+  become: true
