@@ -4,3 +4,11 @@
     name: lxdm
     enabled: true
     state: started
+  become: true
+
+- name: Start/Enable cups
+  service: 
+    name: org.cups.cupsd
+    enabled: true
+    state: started
+  become: true

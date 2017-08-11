@@ -12,11 +12,12 @@
 - name: Install build packages
   pacman: 
     name: base-devel 
+  become: true
 
-- name: Install AUR packages
-  debug: 
-    msg: TODO install AUR package netctltray, clipit, skypeforlinux-bin, pi-bluetooth
+#- name: Install AUR packages
+#  debug: 
+#    msg: TODO install {{ aur_packages }} AUR package netctltray, clipit, skypeforlinux-bin, pi-bluetooth
 
-- name: Install graphics driver  
-  debug: 
-    msg: TODO install correct graphics driver
+#- name: Install graphics driver  
+#  debug: 
+#    msg: TODO install correct graphics driver
