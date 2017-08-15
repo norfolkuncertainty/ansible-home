@@ -28,6 +28,7 @@ desktop_packages:
   - dvd+rw-tools
   - cups
   - gtk3-print-backends
+  - aspell-en
 x_packages:
   - xorg-server
   - fluxbox
