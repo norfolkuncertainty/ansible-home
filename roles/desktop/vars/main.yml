@@ -29,6 +29,7 @@ desktop_packages:
   - cups
   - gtk3-print-backends
   - aspell-en
+  - audacity
 x_packages:
   - xorg-server
   - fluxbox
