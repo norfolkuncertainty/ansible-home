@@ -40,6 +40,7 @@ x_packages:
   - xorg-xbacklight
 aur_packages:
   - package 
+  - firefox-esr
   - netctltray
   - clipit
   - skypeforlinux-bin
