@@ -1,6 +1,6 @@
 #!/usr/bin/env ansible-playbook
 ---
-- hosts: all
+- hosts: "{{ hostname }}"
   remote_user: "{{ username }}"
   become: true
   become_method: "{{ becomemethod }}"
@@ -16,6 +16,10 @@
       private: false
       default: "sudo"
 
+    - name: hostname
+      prompt: "hostname"
+      private: false
+
   tasks:
     - group:
         name: "dave"
@@ -28,7 +32,6 @@
        group: 652900
        home: "/home/dave"
        shell: "/bin/bash"
-       password: "{{ encrypted password }}"
 
 
     - name: Add auth key
@@ -41,7 +44,7 @@
         name: alarm
         state: absent
 
-    - name: Update pacman cach
+    - name: Update pacman cache
       pacman:
         update_cache: true
         upgrade: true
@@ -56,5 +59,13 @@
         state: present
         create: true
         line: 'dave ALL=(ALL) ALL'
+        validate: visudo -cf %s
+
+    - name: Allow dave to run some sudo commands without password
+      lineinfile:
+        dest: /etc/sudoers.d/10_dave
+        state: present
+        create: true
+        line: 'dave ALL = NOPASSWD:/usr/bin/netctl, /usr/bin/wifi-menu, /usr/bin/netctltray, /usr/bin/pacman'
         validate: visudo -cf %s
 

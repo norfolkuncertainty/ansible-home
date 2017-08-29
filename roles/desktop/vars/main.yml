@@ -30,6 +30,7 @@ desktop_packages:
   - gtk3-print-backends
   - aspell-en
   - audacity
+  - sshpass
 x_packages:
   - xorg-server
   - fluxbox

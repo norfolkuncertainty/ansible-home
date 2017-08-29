@@ -12,3 +12,4 @@ base_packages:
    - vim 
    - sudo 
    - screen
+   - base-devel
