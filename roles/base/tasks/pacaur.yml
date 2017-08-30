@@ -1,1 +1,34 @@
 ---
+- name: Created build dir
+  file:
+    path: /home/dave/git/pkgbuild
+    state: directory
+    mode: 0755
+
+- name: Clone down cower package build
+  shell: git clone https://aur.archlinux.org/cower.git
+  args:  
+    creates: /home/dave/git/pkgbuild/cower
+    chdir: /home/dave/git/pkgbuild
+
+- name: Build cower
+  shell: makepkg -si --noconfirm
+  args:
+    chdir: /home/dave/git/pkgbuild/cower
+    executable: /bin/bash
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
+
+- name: Clone down pacaur package build
+  shell: git clone https://aur.archlinux.org/pacaur.git
+  args:  
+    creates: /home/dave/git/pkgbuild/pacaur
+    chdir: /home/dave/git/pkgbuild
+
+- name: Build pacaur
+  shell: makepkg -si --noconfirm
+  args:
+    chdir: /home/dave/git/pkgbuild/pacaur
+    executable: /bin/bash
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"

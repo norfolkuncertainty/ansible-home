@@ -13,3 +13,4 @@ base_packages:
    - sudo 
    - screen
    - base-devel
+   - chrony

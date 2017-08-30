@@ -14,9 +14,9 @@
     name: base-devel 
   become: true
 
-#- name: Install AUR packages
-#  debug: 
-#    msg: TODO install {{ aur_packages }} AUR package netctltray, clipit, skypeforlinux-bin, pi-bluetooth
+- name: Install AUR packages
+  pacaur: name={{ item }} state=present
+  with_items: "{{ aur_packages }}"
 
 #- name: Install graphics driver  
 #  debug: 

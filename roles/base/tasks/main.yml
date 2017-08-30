@@ -1,5 +1,7 @@
 ---
 # tasks file for base
-- include: config.yml
+- include: prerun.yml
 - include: packages.yml
+- include: config.yml
 - include: services.yml
+- include: pacaur.yml

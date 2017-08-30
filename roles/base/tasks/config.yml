@@ -1,14 +1,4 @@
 ---
-- name: set correct mirror for pacman
-  debug:
-    msg: TODO - Set mirror
-  become: true
-
-- name: update pacman cache
-  pacman: 
-    update_cache: true
-  become: true
-
 - name: Set timezone
   file:
     state: link
@@ -31,7 +21,13 @@
     group: root
   become: true
 
-- name: enable multilib
-  debug:
-    msg: TODO - enable multilib
+- name: Copy chrony.conf in
+  copy: 
+    dest: /etc/chrony.conf
+    src: roles/base/files/chrony.conf
+    mode: 644
+    owner: root
+    group: root
   become: true
+  notify:
+  - restart chrony

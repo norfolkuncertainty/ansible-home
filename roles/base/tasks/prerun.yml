@@ -1,0 +1,16 @@
+---
+- name: set correct mirror for pacman
+  debug:
+    msg: TODO - Set mirror
+  become: true
+
+- name: update pacman cache
+  pacman: 
+    update_cache: true
+  become: true
+
+
+- name: enable multilib
+  debug:
+    msg: TODO - enable multilib
+  become: true
