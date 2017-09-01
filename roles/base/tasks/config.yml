@@ -31,3 +31,17 @@
   become: true
   notify:
   - restart chrony
+
+- name: "Create custom fact directory"
+  file:
+    path: "/etc/ansible/facts.d"
+    state: "directory"
+
+- name: Add in pacaur facts
+  copy: 
+    dest: //etc/ansible/facts.d/
+    src: roles/base/files/pacaur.sh
+    mode: 755
+    owner: root
+    group: root
+  become: true
