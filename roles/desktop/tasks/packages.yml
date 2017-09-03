@@ -9,11 +9,6 @@
   with_items: "{{ x_packages }}"
   become: true
 
-- name: Install build packages
-  pacman: 
-    name: base-devel 
-  become: true
-
 - name: Install AUR packages
   pacaur: name={{ item }} state=present
   with_items: "{{ aur_packages }}"
