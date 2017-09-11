@@ -31,6 +31,8 @@ desktop_packages:
   - aspell-en
   - audacity
   - sshpass
+  - tk
+  - encfs
 x_packages:
   - xorg-server
   - fluxbox
@@ -44,3 +46,4 @@ aur_packages:
   - clipit
   - skypeforlinux-bin
   - brother-hl1210w
+  - visual-studio-code
