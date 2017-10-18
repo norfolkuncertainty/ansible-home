@@ -12,6 +12,7 @@
 - name: Install AUR packages
   pacaur: name={{ item }} state=present
   with_items: "{{ aur_packages }}"
+  ignore_errors: True
 
 #- name: Install graphics driver  
 #  debug: 
