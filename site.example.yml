@@ -1,0 +1,9 @@
+---
+- hosts: malory
+  roles: 
+    - base
+    - desktop
+    - virtualisation
+- hosts: sterling
+  roles: 
+    - base

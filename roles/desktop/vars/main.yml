@@ -38,6 +38,8 @@ desktop_packages:
   - alsa-utils
   - calibre
   - transmission-remote-gtk
+  - tcpdump
+  - wireshark-gtk
 x_packages:
   - xorg-server
   - fluxbox
