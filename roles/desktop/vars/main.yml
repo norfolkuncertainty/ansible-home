@@ -37,6 +37,7 @@ desktop_packages:
   - pkgfile
   - alsa-utils
   - calibre
+  - transmission-remote-gtk
 x_packages:
   - xorg-server
   - fluxbox

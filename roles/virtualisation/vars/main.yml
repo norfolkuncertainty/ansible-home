@@ -7,3 +7,5 @@ qemu_packages:
   - dnsmasq
 vagrant_packages:
   - vagrant
+docker_packages:
+  - docker
