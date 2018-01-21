@@ -40,6 +40,8 @@ desktop_packages:
   - transmission-remote-gtk
   - tcpdump
   - wireshark-gtk
+  - testdisk
+  - python-pip
 x_packages:
   - xorg-server
   - fluxbox
