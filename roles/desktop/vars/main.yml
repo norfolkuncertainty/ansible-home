@@ -42,6 +42,7 @@ desktop_packages:
   - wireshark-gtk
   - testdisk
   - python-pip
+  - arm-none-eabi-gcc
 x_packages:
   - xorg-server
   - fluxbox
