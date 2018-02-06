@@ -43,6 +43,7 @@ desktop_packages:
   - testdisk
   - python-pip
   - arm-none-eabi-gcc
+  - exfat-utils
 x_packages:
   - xorg-server
   - fluxbox
