@@ -57,5 +57,6 @@ aur_packages:
   - netctltray
   - clipit
   - skypeforlinux-stable-bin
-  - brother-hl1210w
+  - brother-hl1210w #Broken due to PKGBUILD file, can manually install after package has been created
   - visual-studio-code-bin
+  - google-drive-ocamlfuse-git #Currently broken have to update PKGBUILD file with new jbuilder commands
