@@ -17,7 +17,7 @@ desktop_packages:
   - dialog
   - xscreensaver
   - redshift
-  - python-gobject 
+  - python-gobject
   - python-xdg 
   - librsvg
   - sshfs
@@ -27,7 +27,7 @@ desktop_packages:
   - cdrtools
   - dvd+rw-tools
   - cups
-  - gtk3-print-backends
+  - gtk3
   - aspell-en
   - audacity
   - sshpass
@@ -44,6 +44,7 @@ desktop_packages:
   - python-pip
   - arm-none-eabi-gcc
   - exfat-utils
+  - nfs-utils
 x_packages:
   - xorg-server
   - fluxbox
@@ -55,6 +56,6 @@ aur_packages:
   - firefox-esr-bin
   - netctltray
   - clipit
-  - skypeforlinux-bin
+  - skypeforlinux-stable-bin
   - brother-hl1210w
-  - visual-studio-code
+  - visual-studio-code-bin
