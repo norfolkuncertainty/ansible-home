@@ -12,7 +12,7 @@
 
 - name: import cower authors gpg key
   shell: gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53
-  when: result|failed
+  when: result is failed
 
 - name: Clone down cower package build
   shell: git clone https://aur.archlinux.org/cower.git
@@ -26,13 +26,13 @@
   ignore_errors: True
 
 - name: Build/Install cower
-  shell: makepkg -si --noconfirm
+  shell: makepkg -siA --noconfirm
   args:
     chdir: /home/dave/git/pkgbuild/cower
     executable: /bin/bash
   environment:
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
-  when: result|failed
+  when: result is failed
 
 - name: Clone down pacaur package build
   shell: git clone https://aur.archlinux.org/pacaur.git
@@ -46,10 +46,10 @@
   ignore_errors: True
 
 - name: Build/Install pacaur
-  shell: makepkg -si --noconfirm
+  shell: makepkg -siA --noconfirm
   args:
     chdir: /home/dave/git/pkgbuild/pacaur
     executable: /bin/bash
   environment:
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
-  when: result|failed
+  when: result is failed

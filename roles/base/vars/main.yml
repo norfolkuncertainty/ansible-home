@@ -15,5 +15,4 @@ base_packages:
    - base-devel
    - chrony
    - unzip
-   - tailf
    - wget

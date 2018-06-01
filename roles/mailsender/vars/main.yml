@@ -1,0 +1,5 @@
+---
+# vars file for mailsender
+email: "{{vault_email}}"
+username: "{{vault_username}}"
+password: "{{vault_password}}"

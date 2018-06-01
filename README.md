@@ -6,3 +6,6 @@ ansible-playbook -l <local node name> -c local site.yml
 
 ## Running remotely
 ansible-playbook -l <remote node name> site.yml
+
+## Adding Dave
+./dave.yaml --extra-vars "hostname=<hostname>"
