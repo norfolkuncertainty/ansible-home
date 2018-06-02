@@ -1,0 +1,9 @@
+---
+- name: Install transmission gem
+  gem: name=transmission-rss state=present
+  become: true
+
+
+- name: Install torrent packages
+  pacman: name=transmission-cli state=present
+  become: true
