@@ -1,2 +1,7 @@
 ---
 # tasks file for torrent
+- include_vars: vars/vault.yml
+
+- include: packages.yml
+- include: config.yml
+- include: service.yml
