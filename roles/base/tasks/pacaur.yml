@@ -11,7 +11,7 @@
   ignore_errors: True
 
 - name: import cower authors gpg key
-  shell: gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53
+  shell: gpg --recv-keys 1EB2638FF56C0C53
   when: result is failed
 
 - name: Clone down cower package build
@@ -25,10 +25,21 @@
   register: result
   ignore_errors: True
 
-- name: Build/Install cower
+- name: Clone down auracle-git package build
+  shell: git clone https://aur.archlinux.org/auracle-git.git
+  args:  
+    creates: /home/dave/git/pkgbuild/auracle-git
+    chdir: /home/dave/git/pkgbuild
+
+- name: check auracle-git install
+  shell: pacman -Q auracle-git &> /dev/null
+  register: result
+  ignore_errors: True
+
+- name: Build/Install auracle-git
   shell: makepkg -siA --noconfirm
   args:
-    chdir: /home/dave/git/pkgbuild/cower
+    chdir: /home/dave/git/pkgbuild/auracle-git
     executable: /bin/bash
   environment:
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"

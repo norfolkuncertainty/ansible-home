@@ -32,6 +32,7 @@
        group: 652900
        home: "/home/dave"
        shell: "/bin/bash"
+       password: 
 
 
     - name: Add auth key
@@ -39,15 +40,10 @@
         user: dave
         key: "{{ lookup('file', '/home/dave/.ssh/id_rsa.pub') }}"
        
-    - name: Delete alarm user
-      user:
-        name: alarm
-        state: absent
-
     - name: Update pacman cache
       pacman:
         update_cache: true
-        upgrade: true
+        upgrade: false
 
     - name: Install sudo
       pacman:

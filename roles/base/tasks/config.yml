@@ -31,3 +31,8 @@
   become: true
   notify:
   - restart chrony
+
+- name: Delete alarm user
+  user:
+    name: alarm
+    state: absent
