@@ -1,9 +1,0 @@
----
-- name: load transmission-rss config file
-  template: 
-    dest: /home/torrent/.config/transmission-rss/config.yml
-    src: roles/torrent/templates/transmission-rss-settings.json.j2
-    mode: 644
-    owner: torrent
-    group: torrent
-  become: true

@@ -1,6 +1,0 @@
----
-# vars file for torrent
-url: "{{vault_url}}"
-download_path: "{{vault_download_path}}"
-user: "{{vault_user}}"
-password: "{{vault_password}}"

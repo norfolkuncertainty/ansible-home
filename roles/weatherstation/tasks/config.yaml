@@ -1,0 +1,26 @@
+---
+- name: USB permissions for udev
+  file: src='files/weather.rules' dest='/etc/udev/rules.d/weather.rules' owner='root' group='root'
+  become: true
+
+- name: Backup script
+  file: src='files/backup.sh' dest='/usr/local/bin/backup.sh' mode='0755' owner='root' group='root'
+  become: true
+
+- name: Backup cron job
+  cron: user='weewx' job='/usr/local/bin/backup.sh' weekday='0' hour='1' minute='0'
+  become: true
+
+- name: systemd initscript for weewx
+  file: src='files/weewx.service' dest='/etc/systemd/system/weewx.service' owner='root' group='root'
+  become: true
+  register: initscript
+
+- name: systemd reload
+  shell: 'systemctl daemon-reload'
+  become: true
+  when: initscript.changed
+
+- name: enable weewx on boot
+  service: name='weewx' enabled='true'
+  become: true

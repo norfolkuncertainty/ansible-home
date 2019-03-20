@@ -1,0 +1,16 @@
+---
+- name: Install mariadb
+  pacman: name=mariadb state=present
+  become: true
+
+- name: create mariadb folder structure
+  debug:
+    msg: mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+
+- name: make mariadb secure
+  debug:
+    msg: mysql_secure_installation
+
+- name: MariaDB service started/enabled
+  service: name=mariadb state=started enabled=yes
+  become: true

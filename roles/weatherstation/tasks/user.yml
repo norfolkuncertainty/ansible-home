@@ -1,0 +1,8 @@
+---
+- name: Add weewx group
+  group: name=weewx gid=2002
+  become: true
+
+- name: Add weewx user
+  user: name=weewx uid=2002 group=weewx
+  become: true

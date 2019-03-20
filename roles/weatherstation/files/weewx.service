@@ -1,0 +1,12 @@
+[Unit]
+Description=Weewx Weather Service
+Requires=mysqld.service
+
+[Service]
+Type=simple
+User=weewx
+Group=weewx
+ExecStart=/home/weewx/bin/weewxd /home/weewx/weewx.conf
+
+[Install] 
+WantedBy=multi-user.target
