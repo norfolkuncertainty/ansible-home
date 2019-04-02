@@ -22,4 +22,6 @@ mysql -u root -p
 CREATE DATABASE weewx;
 USE weewx;
 source <unzipped dump file>
+CREATE USER 'weewx'@'localhost' IDENTIFIED BY 'weewx';
+GRANT select, update, create, delete, insert, drop ON weewx.* TO weewx@localhost;
 '
