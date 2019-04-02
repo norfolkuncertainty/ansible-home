@@ -5,4 +5,5 @@ python_packages:
    - python2-cheetah
    - python2-pillow
    - python2-pyusb
+   - freetype2
    - mysql-python
