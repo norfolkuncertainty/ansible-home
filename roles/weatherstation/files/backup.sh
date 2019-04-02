@@ -5,7 +5,7 @@ WEEWXDIR=/home/weewx/
 
 cd /home/weewx/backup
 
-tar -czf weewx-${DATE}.tar.gz ${WEEWXDIR}weewx.conf ${WEEWXDIR}skins/ ${WEEWXDIR}bin/user/
+tar -czf weewx-${DATE}.tar.gz ${WEEWXDIR}weewx.conf ${WEEWXDIR}skins/ ${WEEWXDIR}bin/user/ ${WEEWXDIR}/.ssh/
 
 /usr/bin/mysqldump -uweewx -pweewx weewx | gzip -c > weewx-${DATE}.sql.gz
 
