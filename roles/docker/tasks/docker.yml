@@ -2,6 +2,7 @@
 - name: Install Docker
   pacman: name={{ item }} state=present
   with_items: "{{ docker_packages }}"
+  
   become: true
 
 - name: Add dave to docker group

@@ -8,4 +8,4 @@ ansible-playbook -l <local node name> -c local site.yml
 ansible-playbook -l <remote node name> site.yml
 
 ## Adding Dave
-./dave.yaml --extra-vars "hostname=<hostname>"
+./dave.yaml --extra-vars "hostname=<hostname>" -Kk

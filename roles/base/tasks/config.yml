@@ -36,3 +36,4 @@
   user:
     name: alarm
     state: absent
+  become: true
