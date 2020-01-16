@@ -1,0 +1,21 @@
+---
+- name: Install Squid
+  pacman: name=squid state=present
+  
+  become: true
+
+- name: Create Squid config
+  copy: 
+    dest: /etc/squid.conf
+    src: roles/vpnproxy/files/squid.conf
+    mode: 644
+    owner: root
+    group: root
+  become: true
+
+- name: Start and Enable Squid
+  service: 
+    name: squid
+    enabled: true
+    state: started
+  become: true

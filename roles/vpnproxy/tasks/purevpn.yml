@@ -1,0 +1,30 @@
+---
+- name: Install PPP
+  pacman: name=pptpclient state=present
+  
+  become: true
+
+- name: Create Default Route Script
+  copy: 
+    dest: /etc/ppp/ip-up.d/01-default-route.sh
+    src: roles/vpnproxy/files/01-default-route.sh
+    mode: 755
+    owner: root
+    group: root
+  become: true
+
+- name: Create Sydney Purevpn Config
+  copy: 
+    dest: /etc/ppp/peers/syd
+    src: roles/vpnproxy/files/syd
+    mode: 755
+    owner: root
+    group: root
+  become: true
+
+- name: Enable Sydney config on boot (Dont Start as have to mod Creds)
+  service: 
+    name: ppp@syd
+    enabled: true
+  become: true
+

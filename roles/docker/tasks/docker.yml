@@ -1,7 +1,6 @@
 ---
 - name: Install Docker
-  pacman: name={{ item }} state=present
-  with_items: "{{ docker_packages }}"
+  pacman: name={{ docker_packages }} state=present
   
   become: true
 
