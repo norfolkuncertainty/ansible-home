@@ -1,8 +1,10 @@
 ---
 # vars file for weatherstation
 python_packages:
-   - python-configobj
-   - python-pillow
-   - python-pyusb
-   - python-pymysql
-   - freetype2
+  - python-configobj
+  - python-pillow
+  - python-pyusb
+  - python-pymysql
+  - freetype2
+yay_python_packages:
+  - python-cheetah3

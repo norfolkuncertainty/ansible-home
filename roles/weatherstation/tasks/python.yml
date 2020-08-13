@@ -6,3 +6,7 @@
 - name: Install weewx python package prerequesites
   pacman: name={{ python_packages }} state=present
   become: true
+
+- name: Install weewx python package prerequesites from yay
+  yay: name={{ yay_python_packages }} state=present
+  become: true

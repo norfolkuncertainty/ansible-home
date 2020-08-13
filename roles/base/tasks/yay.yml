@@ -1,0 +1,26 @@
+---
+- name: Created build dir
+  file:
+    path: /home/dave/git/pkgbuild
+    state: directory
+    mode: 0755
+
+- name: Clone down yay package build
+  shell: git clone https://aur.archlinux.org/yay.git
+  args:  
+    creates: /home/dave/git/pkgbuild/yay
+    chdir: /home/dave/git/pkgbuild
+
+- name: check pacaur install
+  shell: pacman -Q yay &> /dev/null
+  register: result
+  ignore_errors: True
+
+- name: Build/Install yay
+  shell: makepkg -siA --noconfirm
+  args:
+    chdir: /home/dave/git/pkgbuild/yay
+    executable: /bin/bash
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
+  when: result is failed
