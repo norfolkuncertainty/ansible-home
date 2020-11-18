@@ -1,0 +1,13 @@
+---
+# defaults file for users
+users:
+  - name: dave2
+    state: absent
+    comment: "blah"
+    uid: 652901
+    group: dave
+  - name: chloe2
+    state: absent
+    comment: "chloes other account"
+    uid: 652902
+    group: chloe

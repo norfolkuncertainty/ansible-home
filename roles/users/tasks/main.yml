@@ -1,0 +1,14 @@
+---
+# tasks file for users
+- name: Add the user 'johnd' with a specific uid and a primary group of 'admin'
+  user:
+    name: "{{ item.name }}"
+    comment: "{{ item.comment }}"
+    uid: "{{ item.uid }}"
+    group: "{{ item.group }}"
+    state: "{{item.state}}"
+  loop: "{{ users }}"
+#- name: Using dict2items
+#  ansible.builtin.debug:
+#    msg: "{{ item.name }}"
+#  loop: "{{ users }}"
