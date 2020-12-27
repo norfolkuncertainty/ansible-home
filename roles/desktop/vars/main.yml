@@ -1,27 +1,18 @@
 ---
 # vars file for desktop
 desktop_packages:
-  - chromium
   - volumeicon
-  - gkrellm
   - firefox
-  - icedtea-web
   - evince
   - terminator
-  - android-tools
   - ansible
   - imagemagick
   - ttf-dejavu
   - pulseaudio
   - vlc
-  - dialog
   - xscreensaver
   - redshift
-  - python-gobject
-  - python-xdg 
-  - librsvg
   - sshfs
-  - cbatticon
   - geeqie
   - libreoffice-fresh
   - cdrtools
@@ -31,21 +22,17 @@ desktop_packages:
   - aspell-en
   - audacity
   - sshpass
-  - tk
+  - whipper
   - encfs
   - ruby
   - pkgfile
   - alsa-utils
   - calibre
-  - transmission-remote-gtk
   - tcpdump
-  - wireshark-gtk
-  - testdisk
   - python-pip
-  - arm-none-eabi-gcc
   - exfat-utils
   - nfs-utils
-x_packages:
+fluxbox_packages:
   - xorg-server
   - fluxbox
   - lxdm
@@ -53,10 +40,4 @@ x_packages:
   - xorg-xev
   - xorg-xbacklight
 aur_packages:
-  - firefox-esr-bin
-  - netctltray
-  - clipit
-  - skypeforlinux-stable-bin
-  - brother-hl1210w #Broken due to PKGBUILD file, can manually install after package has been created
-  - visual-studio-code-bin
-  - google-drive-ocamlfuse-git #Currently broken have to update PKGBUILD file with new jbuilder commands
+#  - brother-hl1210w #Broken due to PKGBUILD file, can manually install after package has been created

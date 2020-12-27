@@ -6,7 +6,6 @@ base_packages:
    - net-tools 
    - netctl
    - rsync 
-   - sysstat 
    - atop 
    - openssh 
    - vim 
