@@ -4,4 +4,4 @@
 - include: packages.yml
 - include: config.yml
 - include: services.yml
-#- include: pacaur.yml
+- include: yay.yml

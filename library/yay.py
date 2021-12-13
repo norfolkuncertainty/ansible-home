@@ -1,453 +1,267 @@
-#!/usr/bin/python -tt
-# -*- coding: utf-8 -*-
+#!/usr/local/bin/python
 
-# (c) 2012, Afterburn <http://github.com/afterburn>
-# (c) 2013, Aaron Bull Schaefer <aaron@elasticdog.com>
-# (c) 2015, Indrajit Raychaudhuri <irc+code@indrajit.com>
+# The MIT License (MIT)
 #
-# This file is part of Ansible
+# Copyright (c) 2014 Austin Hyde
 #
-# Ansible is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 #
-# Ansible is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
-# You should have received a copy of the GNU General Public License
-# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
 
-ANSIBLE_METADATA = {'metadata_version': '1.0',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
+def yay_in_path(module):
+  rc, _, _ = module.run_command('which yay', check_rc=False)
+  return rc == 0
 
 
-DOCUMENTATION = '''
----
-module: pacaur
-short_description: Manage packages with I(pacaur)
-description:
-    - Manage packages with the I(pacaur) package manager, which is used by
-      Arch Linux and its variants.
-version_added: "1.0"
-author:
-    - "Indrajit Raychaudhuri (@indrajitr)"
-    - "'Aaron Bull Schaefer (@elasticdog)' <aaron@elasticdog.com>"
-    - "Afterburn"
-notes: []
-requirements: []
-options:
-    name:
-        description:
-            - Name of the package to install, upgrade, or remove.
-        required: false
-        default: null
-        aliases: [ 'pkg', 'package' ]
+def pacman_in_path(module):
+  rc, _, _ = module.run_command('which pacman', check_rc=False)
+  return rc == 0
 
-    state:
-        description:
-            - Desired state of the package.
-        required: false
-        default: "present"
-        choices: ["present", "absent", "latest"]
-
-    recurse:
-        description:
-            - When removing a package, also remove its dependencies, provided
-              that they are not required by other packages and were not
-              explicitly installed by a user.
-        required: false
-        default: no
-        choices: ["yes", "no"]
-        version_added: "1.3"
-
-    force:
-        description:
-            - When removing package - force remove package, without any
-              checks. When update_cache - force redownload repo
-              databases.
-        required: false
-        default: no
-        choices: ["yes", "no"]
-        version_added: "2.0"
-
-    update_cache:
-        description:
-            - Whether or not to refresh the master package lists. This can be
-              run as part of a package installation or as a separate step.
-        required: false
-        default: no
-        choices: ["yes", "no"]
-        aliases: [ 'update-cache' ]
-
-    upgrade:
-        description:
-            - Whether or not to upgrade whole system
-        required: false
-        default: no
-        choices: ["yes", "no"]
-        version_added: "2.0"
-'''
-
-RETURN = '''
-packages:
-    description: a list of packages that have been changed
-    returned: when upgrade is set to yes
-    type: list of strings
-    sample: ['package', 'other-package']
-'''
-
-EXAMPLES = '''
-# Install package foo
-- pacaur:
-    name: foo
-    state: present
-
-# Upgrade package foo
-- pacaur:
-    name: foo
-    state: latest
-    update_cache: yes
-
-# Remove packages foo and bar
-- pacaur:
-    name: foo,bar
-    state: absent
-
-# Recursively remove package baz
-- pacaur:
-    name: baz
-    state: absent
-    recurse: yes
-
-# Run the equivalent of "pacaur -Sy" as a separate step
-- pacaur:
-    update_cache: yes
-
-# Run the equivalent of "pacaur -Su" as a separate step
-- pacaur:
-    upgrade: yes
-
-# Run the equivalent of "pacaur -Syu" as a separate step
-- pacaur:
-    update_cache: yes
-    upgrade: yes
-
-# Run the equivalent of "pacaur -Rdd", force remove package baz
-- pacaur:
-    name: baz
-    state: absent
-    force: yes
-'''
-
-import shlex
-import os
-import re
-import sys
-
-def get_version(pacaur_output):
-    """Take pacaur -Qi or pacaur -Si output and get the Version"""
-    lines = pacaur_output.split('\n')
+def get_version(yay_output):
+    '''Take yay -Qi or yay -Si output and get the Version'''
+    lines = yay_output.split('\n')
     for line in lines:
         if 'Version' in line:
             return line.split(':')[1].strip()
     return None
 
-def query_package(module, pacaur_path, name, state="present"):
-    """Query the package status in both the local system and the repository. Returns a boolean to indicate if the package is installed, a second boolean to indicate if the package is up-to-date and a third boolean to indicate whether online information were available"""
-    if state == "present":
-        lcmd = "%s -Qi %s" % (pacaur_path, name)
-        lrc, lstdout, lstderr = module.run_command(lcmd, check_rc=False)
-        if lrc != 0:
-            # package is not installed locally
-            return False, False, False
+def query_package(module, pkg, state):
+  '''
+  Query the package status in both the local system and the repository.
+  Returns three booleans to indicate:
+    * If the package is installed
+    * If the package is up-to-date
+    * Whether online information was available
+  '''
+  local_check_cmd = 'yay -Qi %s' % pkg
+  local_check_rc, local_check_stdout, _ = module.run_command(local_check_cmd, check_rc=False)
+  if local_check_rc != 0:
+    return False, False, False
 
-        # get the version installed locally (if any)
-        lversion = get_version(lstdout)
+  # No need to check for the repo version in some situations
+  # Indicate the package is out-of-date, because we chose not to check
+  if state == 'present' or state == 'absent':
+    return True, False, False
 
-        rcmd = "%s -Si %s" % (pacaur_path, name)
-        rrc, rstdout, rstderr = module.run_command(rcmd, check_rc=False)
-        # get the version in the repository
-        rversion = get_version(rstdout)
+  local_version = get_version(local_check_stdout)
 
-        if rrc == 0:
-            # Return True to indicate that the package is installed locally, and the result of the version number comparison
-            # to determine if the package is up-to-date.
-            return True, (lversion == rversion), False
+  repo_check_cmd = 'yay -Si %s' % pkg
+  repo_check_rc, repo_check_stdout, repo_check_stderr = module.run_command(repo_check_cmd, check_rc=False)
+  repo_version = get_version(repo_check_stdout)
 
-    # package is installed but cannot fetch remote Version. Last True stands for the error
-        return True, True, True
+  if repo_check_rc == 0 and repo_check_stderr == '':
+    return True, (local_version == repo_version), False
+  else:
+    # Indicate package is up-to-date, but just because we hit an error contacting the repo
+    return True, True, True
 
+def update_package_db(module):
+  rc, _, stderr = module.run_command('yay -Sy', check_rc=False)
 
-def update_package_db(module, pacaur_path):
-    if module.params["force"]:
-        args = "Syy"
+  if rc == 0 and stderr == '':
+    return False, 'Package DB up-to-date'
+  elif rc == 1 and stderr == '':
+    return True, 'Updated the package DB'
+  else:
+    module.fail_json(msg='could not update package db: %s' % stderr)
+
+def upgrade(module):
+  check_rc, check_stdout, check_stderr = module.run_command('yay -Qqu', check_rc=False)
+
+  if check_rc == 0 and check_stderr == '' and module.check_mode:
+    return True, '%s package(s) would be upgraded' % (len(check_stdout.split('\n')) - 1)
+  elif check_rc == 0 and check_stderr == '' and not module.check_mode:
+    upgrade_rc, _, upgrade_stderr = module.run_command(
+      'yay -Su --noconfirm',
+      check_rc=False,
+    )
+
+    if upgrade_rc == 0:
+      return True, 'System upgraded'
     else:
-        args = "Sy"
+      module.fail_json(msg='unable to upgrade: %s' % upgrade_stderr)
+  elif check_rc == 1 and check_stderr == '':
+    return False, 'Nothing to upgrade'
+  else:
+    module.fail_json(msg='unable to check for upgrade: %s' % check_stderr)
 
-    cmd = "%s -%s" % (pacaur_path, args)
-    rc, stdout, stderr = module.run_command(cmd, check_rc=False)
+def get_sudo_user(module):
+  # ansible sets the SUDO_USER environment variable.  Default to using this,
+  # checking USER and then `logname` as backups.
+  user = os.environ.get('SUDO_USER') or os.environ.get('USER')
 
-    if rc == 0:
-        return True
-    else:
-        module.fail_json(msg="could not update package db")
+  if not user:
+    rc, stdout, _ = module.run_command('logname', check_rc=True)
+    user = stdout
 
-def upgrade(module, pacaur_path):
-    cmdupgrade = "%s -Suq --noconfirm" % (pacaur_path)
-    cmdneedrefresh = "%s -Qu" % (pacaur_path)
-    rc, stdout, stderr = module.run_command(cmdneedrefresh, check_rc=False)
-    data = stdout.split('\n')
-    data.remove('')
-    packages = []
-    diff = {
-        'before': '',
-        'after': '',
-    }
+  return user
 
-    if rc == 0:
-        regex = re.compile('(\w+) ((?:\S+)-(?:\S+)) -> ((?:\S+)-(?:\S+))')
-        b = []
-        a = []
-        for p in data:
-            m = regex.search(p)
-            packages.append(m.group(1))
-            if module._diff:
-                diff['before'] += "%s-%s\n" % (m.group(1), m.group(2))
-                diff['after'] += "%s-%s\n" % (m.group(1), m.group(3))
-        if module.check_mode:
-            module.exit_json(changed=True, msg="%s package(s) would be upgraded" % (len(data)), packages=packages, diff=diff)
-        rc, stdout, stderr = module.run_command(cmdupgrade, check_rc=False)
-        if rc == 0:
-            module.exit_json(changed=True, msg='System upgraded', packages=packages, diff=diff)
-        else:
-            module.fail_json(msg="Could not upgrade")
-    else:
-        module.exit_json(changed=False, msg='Nothing to upgrade', packages=packages)
+def check_packages(module, pkgs, state):
+  would_be_changed = []
 
-def remove_packages(module, pacaur_path, packages):
-    data = []
-    diff = {
-        'before': '',
-        'after': '',
-    }
+  for pkg in pkgs:
+    installed, updated, _ = query_package(module, pkg, state)
+    if ((state in ['present', 'latest'] and not installed) or
+        (state == 'latest' and not updated) or
+        (state == 'absent' and installed)):
+      would_be_changed.append(pkg)
 
-    if module.params["recurse"] or module.params["force"]:
-        if module.params["recurse"]:
-            args = "Rs"
-        if module.params["force"]:
-            args = "Rdd"
-        if module.params["recurse"] and module.params["force"]:
-            args = "Rdds"
-    else:
-        args = "R"
+  word = 'installed'
+  if state == 'absent':
+    word = 'removed'
 
-    remove_c = 0
-    # Using a for loop in case of error, we can report the package that failed
-    for package in packages:
-        # Query the package first, to see if we even need to remove
-        installed, updated, unknown = query_package(module, pacaur_path, package)
-        if not installed:
-            continue
+  if would_be_changed:
+    return True, '%s package(s) would be %s' % (len(would_be_changed), word)
+  else:
+    return False, 'All packages are already %s' % word
 
-        cmd = "%s -%s %s --noconfirm --noprogressbar" % (pacaur_path, args, package)
-        rc, stdout, stderr = module.run_command(cmd, check_rc=False)
+def install_packages(module, pkgs, state):
+  num_installed = 0
+  package_err = []
+  message = ''
 
-        if rc != 0:
-            module.fail_json(msg="failed to remove %s" % (package))
+  sudo_user = get_sudo_user(module)
+  cmd = 'sudo -u %s yay --noconfirm -S %s'
 
-        if module._diff:
-            d = stdout.split('\n')[2].split(' ')[2:]
-            for i, pkg in enumerate(d):
-                d[i] = re.sub('-[0-9].*$', '', d[i].split('/')[-1])
-                diff['before'] += "%s\n" % pkg
-            data.append('\n'.join(d))
+  for pkg in pkgs:
+    installed, updated, latest_error = query_package(module, pkg, state)
+    if latest_error and state == 'latest':
+        package_err.append(pkg)
 
-        remove_c += 1
+    if installed and (state == 'present' or (state == 'latest' and updated)):
+        continue
 
-    if remove_c > 0:
-        module.exit_json(changed=True, msg="removed %s package(s)" % remove_c, diff=diff)
+    rc, _, stderr = module.run_command(cmd % (sudo_user, pkg), check_rc=False)
 
-    module.exit_json(changed=False, msg="package(s) already absent")
+    if rc != 0:
+      module.fail_json(msg='Failed to install package %s, because: %s' % (pkg, stderr))
 
+    num_installed += 1
 
-def install_packages(module, pacaur_path, state, packages, package_files):
-    install_c = 0
-    package_err = []
-    message = ""
-    data = []
-    diff = {
-        'before': '',
-        'after': '',
-    }
+  if state == 'latest' and len(package_err) > 0:
+    message = 'But could not ensure "latest" state for %s package(s) as remote version could not be fetched.' % package_err
 
-    to_install_repos = []
-    to_install_files = []
-    for i, package in enumerate(packages):
-        # if the package is installed and state == present or state == latest and is up-to-date then skip
-        installed, updated, latestError = query_package(module, pacaur_path, package)
-        if latestError and state == 'latest':
-            package_err.append(package)
+  if num_installed > 0:
+    return True, 'Installed %s package(s). %s' % (num_installed, message)
+  else:
+    return False, 'All packages were already installed. %s' % message
 
-        if installed and (state == 'present' or (state == 'latest' and updated)):
-            continue
+def remove_packages(module, pkgs, recurse, state):
+  num_removed = 0
 
-        if package_files[i]:
-            to_install_files.append(package_files[i])
-        else:
-            to_install_repos.append(package)
+  arg = 'R'
+  word = 'remove'
+  if recurse:
+    arg = 'Rs'
+    word = 'recursively remove'
 
-    if to_install_repos:
-        cmd = "%s -S %s --noconfirm --noprogressbar --needed" % (pacaur_path, " ".join(to_install_repos))
-        rc, stdout, stderr = module.run_command(cmd, check_rc=False)
+  cmd = 'pacman -%s --noconfirm %s'
 
-        if rc != 0:
-            module.fail_json(msg="failed to install %s: %s" % (" ".join(to_install_repos), stderr))
+  for pkg in pkgs:
+    installed, _, _ = query_package(module, pkg, state)
+    if not installed:
+      continue
 
-        data = stdout.split('\n')[3].split(' ')[2:]
-        data = [ i for i in data if i != '' ]
-        for i, pkg in enumerate(data):
-            data[i] = re.sub('-[0-9].*$', '', data[i].split('/')[-1])
-            if module._diff:
-                diff['after'] += "%s\n" % pkg
+    rc, _, stderr = module.run_command(cmd % (arg, pkg), check_rc=False)
 
-        install_c += len(to_install_repos)
+    if rc != 0:
+      module.fail_json(msg='failed to %s package %s because: %s' % (word, pkg, stderr))
 
-    if to_install_files:
-        cmd = "%s -U %s --noconfirm --noprogressbar --needed" % (pacaur_path, " ".join(to_install_files))
-        rc, stdout, stderr = module.run_command(cmd, check_rc=False)
+    num_removed += 1
 
-        if rc != 0:
-            module.fail_json(msg="failed to install %s: %s" % (" ".join(to_install_files), stderr))
-
-        data = stdout.split('\n')[3].split(' ')[2:]
-        data = [ i for i in data if i != '' ]
-        for i, pkg in enumerate(data):
-            data[i] = re.sub('-[0-9].*$', '', data[i].split('/')[-1])
-            if module._diff:
-                diff['after'] += "%s\n" % pkg
-
-        install_c += len(to_install_files)
-
-    if state == 'latest' and len(package_err) > 0:
-        message = "But could not ensure 'latest' state for %s package(s) as remote version could not be fetched." % (package_err)
-
-    if install_c > 0:
-        module.exit_json(changed=True, msg="installed %s package(s). %s" % (install_c, message), diff=diff)
-
-    module.exit_json(changed=False, msg="package(s) already installed. %s" % (message), diff=diff)
-
-def check_packages(module, pacaur_path, packages, state):
-    would_be_changed = []
-    diff = {
-        'before': '',
-        'after': '',
-        'before_header': '',
-        'after_header': ''
-    }
-
-    for package in packages:
-        installed, updated, unknown = query_package(module, pacaur_path, package)
-        if ((state in ["present", "latest"] and not installed) or
-                (state == "absent" and installed) or
-                (state == "latest" and not updated)):
-            would_be_changed.append(package)
-    if would_be_changed:
-        if state == "absent":
-            state = "removed"
-
-        if module._diff and (state == 'removed'):
-            diff['before_header'] = 'removed'
-            diff['before'] = '\n'.join(would_be_changed) + '\n'
-        elif module._diff and ((state == 'present') or (state == 'latest')):
-            diff['after_header'] = 'installed'
-            diff['after'] = '\n'.join(would_be_changed) + '\n'
-
-        module.exit_json(changed=True, msg="%s package(s) would be %s" % (
-            len(would_be_changed), state), diff=diff)
-    else:
-        module.exit_json(changed=False, msg="package(s) already %s" % state, diff=diff)
-
-
-def expand_package_groups(module, pacaur_path, pkgs):
-    expanded = []
-
-    for pkg in pkgs:
-        cmd = "%s -Sgq %s" % (pacaur_path, pkg)
-        rc, stdout, stderr = module.run_command(cmd, check_rc=False)
-
-        if rc == 0:
-            # A group was found matching the name, so expand it
-            for name in stdout.split('\n'):
-                name = name.strip()
-                if name:
-                    expanded.append(name)
-        else:
-            expanded.append(pkg)
-
-    return expanded
+  if num_removed > 0:
+    return True, 'Removed %s package(s)' % num_removed
+  else:
+    return False, 'All packages were already removed'
 
 
 def main():
-    module = AnsibleModule(
-        argument_spec    = dict(
-            name         = dict(aliases=['pkg', 'package'], type='list'),
-            state        = dict(default='present', choices=['present', 'installed', "latest", 'absent', 'removed']),
-            recurse      = dict(default=False, type='bool'),
-            force        = dict(default=False, type='bool'),
-            upgrade      = dict(default=False, type='bool'),
-            update_cache = dict(default=False, aliases=['update-cache'], type='bool')
-        ),
-        required_one_of = [['name', 'update_cache', 'upgrade']],
-        supports_check_mode = True)
+  module = AnsibleModule(
+    argument_spec = dict(
+      name         = dict(type='list'),
+      state        = dict(
+          default='present',
+          choices=['absent', 'present', 'latest'],
+      ),
+      recurse      = dict(default='no', type='bool'),
+      upgrade      = dict(default='no', type='bool'),
+      update_cache = dict(
+          default='no',
+          aliases=['update-cache'],
+          type='bool',
+      ),
+    ),
+    required_one_of = [['name', 'update_cache', 'upgrade']],
+    supports_check_mode = True
+  )
 
-    pacaur_path = module.get_bin_path('pacaur', True)
+  if not yay_in_path(module):
+    module.fail_json(msg="could not locate yay executable")
 
-    p = module.params
+  if not pacman_in_path(module):
+    module.fail_json(msg="could not locate pacman executable")
 
-    # normalize the state parameter
-    if p['state'] in ['present', 'installed']:
-        p['state'] = 'present'
-    elif p['state'] in ['absent', 'removed']:
-        p['state'] = 'absent'
+  p = module.params
 
-    if p["update_cache"] and not module.check_mode:
-        update_package_db(module, pacaur_path)
-        if not (p['name'] or p['upgrade']):
-            module.exit_json(changed=True, msg='Updated the package master lists')
+  changed = False
+  messages = []
+  if p["update_cache"] and not module.check_mode:
+    updated, update_message = update_package_db(module)
+    changed = changed or updated
+    messages.append(update_message)
 
-    if p['update_cache'] and module.check_mode and not (p['name'] or p['upgrade']):
-        module.exit_json(changed=True, msg='Would have updated the package cache')
+  if p['update_cache'] and module.check_mode:
+    changed = True
+    messages.append('Would have updated the package cache')
 
-    if p['upgrade']:
-        upgrade(module, pacaur_path)
+  if p['upgrade']:
+     upgraded, upgrade_message = upgrade(module)
+     changed = changed or upgraded
+     messages.append(upgrade_message)
 
+  if p['name'] and module.check_mode:
+    packages_would_change, check_message = check_packages(
+        module,
+        p['name'],
+        p['state'],
+    )
+    changed = changed or packages_would_change
+    messages.append(check_message)
+  elif p['name'] and not module.check_mode:
     if p['name']:
-        pkgs = expand_package_groups(module, pacaur_path, p['name'])
+      if p['state'] in ['present', 'latest']:
+        packages_changed, package_message = install_packages(
+            module,
+            p['name'],
+            p['state'],
+        )
+      elif p['state'] == 'absent':
+        packages_changed, package_message = remove_packages(
+            module,
+            p['name'],
+            p['recurse'],
+            p['state'],
+        )
 
-        pkg_files = []
-        for i, pkg in enumerate(pkgs):
-            if re.match(".*\.pkg\.tar(\.(gz|bz2|xz|lrz|lzo|Z))?$", pkg):
-                # The package given is a filename, extract the raw pkg name from
-                # it and store the filename
-                pkg_files.append(pkg)
-                pkgs[i] = re.sub('-[0-9].*$', '', pkgs[i].split('/')[-1])
-            else:
-                pkg_files.append(None)
+      changed = changed or packages_changed
+      messages.append(package_message)
 
-        if module.check_mode:
-            check_packages(module, pacaur_path, pkgs, p['state'])
+  module.exit_json(changed=changed, msg='. '.join(messages))
 
-        if p['state'] in ['present', 'latest']:
-            install_packages(module, pacaur_path, p['state'], pkgs, pkg_files)
-        elif p['state'] == 'absent':
-            remove_packages(module, pacaur_path, pkgs)
 
-# import module snippets
 from ansible.module_utils.basic import *
-
-if __name__ == "__main__":
-    main()
+main()
