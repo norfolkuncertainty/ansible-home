@@ -1,0 +1,7 @@
+---
+- name: Base Install
+  hosts: all
+  vars:
+    yay_build_user: "vagrant"
+  roles:
+    - role: base

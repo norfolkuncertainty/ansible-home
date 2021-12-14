@@ -1,0 +1,40 @@
+---
+- name: set mirror for pacman
+  ansible.builtin.template:
+    src: mirrorlist.j2
+    dest: /etc/pacman.d/mirrorlist
+    mode: '0644'
+  become: true
+
+- name: update pacman cache
+  pacman: 
+    update_cache: true
+  become: true
+
+- name: Created build dir
+  file:
+    path: "{{ yay_build_dir }}"
+    state: directory
+    owner: "{{ yay_build_user }}"
+    mode: 0755
+  become: true
+
+- name: Clone down yay package build
+  shell: git clone https://aur.archlinux.org/yay.git
+  args:  
+    creates: "{{ yay_build_dir }}/yay"
+    chdir: "{{ yay_build_dir }}"
+
+- name: check pacaur install
+  shell: pacman -Q yay &> /dev/null
+  register: result
+  ignore_errors: True
+
+- name: Build/Install yay
+  shell: makepkg -siA --noconfirm
+  args:
+    chdir: "{{ yay_build_dir }}/yay"
+    executable: /bin/bash
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
+  when: result is failed

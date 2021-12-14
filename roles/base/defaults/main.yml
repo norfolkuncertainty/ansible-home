@@ -1,2 +1,5 @@
 ---
 # defaults file for base
+pacman_mirrors:
+  - "https://mirror.fsmg.org.nz/archlinux/$repo/os/$arch"
+yay_build_dir: /usr/local/build
