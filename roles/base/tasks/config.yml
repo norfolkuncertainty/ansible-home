@@ -21,17 +21,6 @@
     group: root
   become: true
 
-- name: Copy chrony.conf in
-  copy: 
-    dest: /etc/chrony.conf
-    src: roles/base/files/chrony.conf
-    mode: 644
-    owner: root
-    group: root
-  become: true
-  notify:
-  - restart chrony
-
 - name: Delete alarm user
   user:
     name: alarm

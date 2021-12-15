@@ -62,6 +62,6 @@
         dest: /etc/sudoers.d/10_dave
         state: present
         create: true
-        line: 'dave ALL = NOPASSWD:/usr/bin/netctl, /usr/bin/wifi-menu, /usr/bin/netctltray, /usr/bin/pacman'
+        line: 'dave ALL = NOPASSWD: /usr/bin/pacman'
         validate: visudo -cf %s
 

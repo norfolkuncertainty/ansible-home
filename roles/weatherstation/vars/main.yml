@@ -6,5 +6,6 @@ python_packages:
   - python-pyusb
   - python-pymysql
   - freetype2
+  - python-setuptools
 yay_python_packages:
   - python-cheetah3

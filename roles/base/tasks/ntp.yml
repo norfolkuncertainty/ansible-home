@@ -1,0 +1,28 @@
+---
+- name: install chrony
+  package:
+    name: chrony
+    state: present
+
+- name: uninstall ntp
+  package:
+    name: ntp
+    state: absent
+
+- name: Copy chrony.conf in
+  copy: 
+    dest: /etc/chrony.conf
+    src: roles/base/files/chrony.conf
+    mode: 644
+    owner: root
+    group: root
+  become: true
+  notify:
+  - restart chrony
+  
+- name: Start/Enable chrony
+  service: 
+    name: chronyd
+    enabled: true
+    state: started
+  become: true

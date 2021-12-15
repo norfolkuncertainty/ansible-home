@@ -1,18 +1,9 @@
 ---
 # vars file for base
 base_packages:
-   - bind-tools
-   - git
-   - net-tools 
-   - netctl
+   - dog
    - rsync 
-   - sysstat 
-   - atop 
-   - openssh 
    - vim 
    - sudo 
    - screen
-   - base-devel
-   - chrony
    - unzip
-   - wget

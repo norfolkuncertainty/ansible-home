@@ -1,7 +1,0 @@
----
-- name: Start/Enable chrony
-  service: 
-    name: chronyd
-    enabled: true
-    state: started
-  become: true

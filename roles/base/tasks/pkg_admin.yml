@@ -11,6 +11,14 @@
     update_cache: true
   become: true
 
+- name: install git and base devel
+  package: 
+    name: 
+      - git
+      - base-devel
+    state: present
+  become: true
+
 - name: Created build dir
   file:
     path: "{{ yay_build_dir }}"

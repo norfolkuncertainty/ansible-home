@@ -1,8 +1,4 @@
 ---
-- name: force python to version 2
-  file: src=/usr/bin/python2 dest=/usr/bin/python owner=root group=root state=link force=true
-  become: true
-
 - name: Install weewx python package prerequesites
   pacman: name={{ python_packages }} state=present
   become: true

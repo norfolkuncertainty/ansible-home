@@ -1,8 +1,5 @@
 ---
 # tasks file for base
-#- include: prerun.yml
-#- include: packages.yml
-#- include: config.yml
-#- include: services.yml
-#- include: yay.yml
+- include: config.yml
 - include: pkg_admin.yml
+- include: packages.yml

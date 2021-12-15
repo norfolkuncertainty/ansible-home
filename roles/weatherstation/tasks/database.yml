@@ -1,6 +1,8 @@
 ---
 - name: Install mariadb
-  pacman: name=mariadb state=present
+  pacman: 
+    name=mariadb 
+    state=present
   become: true
 
 - name: create mariadb folder structure
