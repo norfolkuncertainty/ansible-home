@@ -1,5 +1,5 @@
 ---
 # tasks file for base
-- include: config.yml
-- include: pkg_admin.yml
-- include: packages.yml
+- include_tasks: config.yml
+- include_tasks: pkg_admin.yml
+- include_tasks: packages.yml
