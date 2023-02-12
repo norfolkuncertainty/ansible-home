@@ -1,0 +1,14 @@
+---
+- name: Install HAproxy
+  package:
+    name: haproxy
+    state: present
+
+- name: Configure HAproxy
+  template:
+    dest: /etc/haproxy/haproxy.cfg
+    src: haproxy.cfg.j2
+    owner: root
+    group: root
+    mode: 0655
+  notify: "reload haproxy"

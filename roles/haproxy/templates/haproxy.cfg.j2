@@ -1,0 +1,28 @@
+global
+    maxconn     20000
+    log         127.0.0.1 local0
+    user        haproxy
+    chroot      /usr/share/haproxy
+    pidfile     /run/haproxy.pid
+    daemon
+
+defaults
+  mode tcp
+  timeout client 10s
+  timeout connect 5s
+  timeout server 10s 
+  timeout http-request 10s
+
+frontend kube_http
+  bind 0.0.0.0:80
+  default_backend kube04_http
+
+frontend kube_https
+  bind 0.0.0.0:443
+  default_backend kube04_https
+
+backend kube04_http
+  server kube04 192.168.1.134:80
+
+backend kube04_https
+  server kube04 192.168.1.134:443
