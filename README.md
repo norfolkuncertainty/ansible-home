@@ -34,3 +34,8 @@ ansible-playbook -l <remote node name> site.yml -K
     ```
   - `systemctl enable systemd-networkd`
 - Reboot
+- Make DHCP lease static
+- Add servername to internal DNS
+- Add server to site.yml with profile
+- Add user via playbook
+- Run ansible playbook
