@@ -11,4 +11,4 @@
     owner: root
     group: root
     mode: 0655
-  notify: "reload haproxy"
+  notify: "haproxy-reload"

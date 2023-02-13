@@ -13,16 +13,15 @@ defaults
   timeout server 10s 
   timeout http-request 10s
 
-frontend kube_http
-  bind 0.0.0.0:80
-  default_backend kube04_http
+{% for frontend in haproxy_front_ends %}
+frontend {{ frontend.name }}
+  bind {{ frontend.bind}}
+  default_backend {{ frontend.default_backend }}
 
-frontend kube_https
-  bind 0.0.0.0:443
-  default_backend kube04_https
+{% endfor %}
 
-backend kube04_http
-  server kube04 192.168.1.134:80
-
-backend kube04_https
-  server kube04 192.168.1.134:443
+{% for backend in haproxy_back_ends %}
+backend {{ backend.name }}
+  server {{ backend.server }}
+  
+{% endfor %}

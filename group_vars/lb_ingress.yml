@@ -1,0 +1,12 @@
+haproxy_front_ends:
+  - name: ingress_http
+    bind: "0.0.0.0:80"
+    default_backend: "microk8s_http"
+  - name: ingress_https
+    bind: "0.0.0.0:443"
+    default_backend: "microk8s_https"
+haproxy_back_ends:
+  - name: microk8s_http
+    server: "kube04 192.168.1.134:80"
+  - name: microk8s_https
+    server: "kube04 192.168.1.134:443"
