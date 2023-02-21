@@ -10,3 +10,7 @@ haproxy_back_ends:
     server: "kube04 192.168.1.134:80"
   - name: microk8s_https
     server: "kube04 192.168.1.134:443"
+keepalived_checks:
+    - name: chk_haproxy
+      script: "pidof haproxy"
+      interval: 2
