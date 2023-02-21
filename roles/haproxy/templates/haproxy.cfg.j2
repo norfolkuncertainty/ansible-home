@@ -7,11 +7,24 @@ global
     daemon
 
 defaults
-  mode tcp
-  timeout client 10s
+  mode {{ haproxy_mode }}
+  log global
+  option httplog
+  option dontlognull
+  option http-server-close
+  option redispatch
+  option contstats
+  retries 3
+  backlog 10000
+  timeout client 25s
   timeout connect 5s
-  timeout server 10s 
-  timeout http-request 10s
+  timeout server 25s 
+  timeout http-request 15s
+  timeout tunnel 3600s
+  timeout http-keep-alive 1s
+  timeout http-request 15s
+  timeout queue 30s
+  timeout tarpit 60s
 
 {% for frontend in haproxy_front_ends %}
 frontend {{ frontend.name }}
