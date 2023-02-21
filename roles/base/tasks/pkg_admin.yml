@@ -14,8 +14,11 @@
 - name: install git and base devel
   package: 
     name: 
-      - git
       - base-devel
+      - git
+      - fakeroot
+      - patch
+      - which
     state: present
   become: true
 
@@ -32,6 +35,7 @@
   args:  
     creates: "{{ yay_build_dir }}/yay"
     chdir: "{{ yay_build_dir }}"
+  become: false
 
 - name: check pacaur install
   shell: pacman -Q yay &> /dev/null
@@ -46,3 +50,4 @@
   environment:
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
   when: result is failed
+  become: false
