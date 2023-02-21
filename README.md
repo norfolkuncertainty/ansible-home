@@ -14,7 +14,7 @@ ansible-playbook -l <remote node name> site.yml -K
 
 - Confirm network
 - Partition and format disks, then mount
-- `pacstrap -K /mnt base linux linux-firmware openssh grub`
+- `pacstrap -K /mnt base linux linux-firmware openssh grub vim python`
 - `genfstab -U /mnt >> /mnt/etc/fstab`
 - `arch-chroot /mnt`
 - `echo $HOSTNAME > /etc/hostname`
@@ -33,9 +33,10 @@ ansible-playbook -l <remote node name> site.yml -K
     DHCP=yes
     ```
   - `systemctl enable systemd-networkd`
+  - `systemctl enable systemd-resolved`
 - Reboot
 - Make DHCP lease static
-- Add servername to internal DNS
+- Add servername to internal DNS and spreadsheet
 - Add server to site.yml with profile
 - Add user via playbook
 - Run ansible playbook
