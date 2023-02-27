@@ -12,3 +12,9 @@
     group: root
     mode: 0655
   notify: "haproxy-reload"
+
+- name: Start HAproxy
+  service:
+    name: haproxy
+    state: started
+    enabled: true
