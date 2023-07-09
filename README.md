@@ -7,6 +7,10 @@ ansible-playbook -l <local node name> site.yml -c local
 ## Running remotely
 ansible-playbook -l <remote node name> site.yml -K
 
+## Running proxmox role
+
+ansible-playbook site.yml -l localhost --tags proxmox -c local --ask-vault-pass
+
 ## Adding Dave
 ./dave.yaml --extra-vars "hostname=<hostname>" -Kk
 

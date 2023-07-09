@@ -1,0 +1,21 @@
+---
+- name: Create VMs
+  community.general.proxmox_kvm:
+    name: "{{ item.name }}"
+    node: "{{ item.node }}"
+    api_token_secret: "{{ item.api_token.value }}"
+    api_token_id: "{{ item.api_token_id | default('ansible') }}"
+    api_host: "{{ item.api_host | default('proxmox1.internal:8006') }}"
+    api_user: "{{ item.api_user | default('root@pam') }}"
+    validate_certs: "{{ item.validate_certs | default('false')}}"
+    cores: "{{ item.cores | default(2) }}"
+    memory: "{{ item.memory | default(1024) }}"
+    virtio:
+      virtio1: "{{ item.disk1 | default('local-lvm:32,format=raw') }}"
+    ide:
+      ide2: "{{ item.cd1 | default('local:iso/archlinux-2023.01.01-x86_64.iso,media=cdrom') }}"
+    net:
+      net0: "{{ item.net1 | default('virtio,bridge=vmbr0,firewall=1') }}"
+    onboot: "{{ item.onboot | default('true') }}"
+    state: "{{ item.state | default('present') }}"
+  loop: "{{ vms }}"

@@ -31,10 +31,9 @@
   become: true
 
 - name: Clone down yay package build
-  shell: git clone https://aur.archlinux.org/yay.git
-  args:  
-    creates: "{{ yay_build_dir }}/yay"
-    chdir: "{{ yay_build_dir }}"
+  ansible.builtin.git:
+    repo: https://aur.archlinux.org/yay.git
+    dest: "{{ yay_build_dir }}/yay"
   become: false
 
 - name: check pacaur install
