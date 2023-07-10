@@ -11,3 +11,10 @@ vms:
   - name: loadbalancer3
     node: proxmox3
     api_token: *api-key
+  - name: talos-m3-a
+    node: proxmox3
+    api_token: *api-key
+    memory: 2048
+    disk1: 'local-lvm:50,format=raw'
+    cd1: 'local:iso/talos-amd64-v1.4.4.iso,media=cdrom'
+    cpu: 'host'

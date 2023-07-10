@@ -8,6 +8,7 @@
     api_host: "{{ item.api_host | default('proxmox1.internal:8006') }}"
     api_user: "{{ item.api_user | default('root@pam') }}"
     validate_certs: "{{ item.validate_certs | default('false')}}"
+    cpu: "{{ item.cpu | default('kvm64') }}"
     cores: "{{ item.cores | default(2) }}"
     memory: "{{ item.memory | default(1024) }}"
     virtio:
