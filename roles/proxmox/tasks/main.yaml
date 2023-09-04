@@ -13,10 +13,12 @@
     memory: "{{ item.memory | default(1024) }}"
     virtio:
       virtio1: "{{ item.disk1 | default('local-lvm:32,format=raw') }}"
+      virtio2: "{{ item.disk2 | default(omit) }}"
     ide:
       ide2: "{{ item.cd1 | default('local:iso/archlinux-2023.01.01-x86_64.iso,media=cdrom') }}"
     net:
       net0: "{{ item.net1 | default('virtio,bridge=vmbr0,firewall=1') }}"
     onboot: "{{ item.onboot | default('true') }}"
     state: "{{ item.state | default('present') }}"
+    vmid: "{{ item.id | default(omit) }}"
   loop: "{{ vms }}"
