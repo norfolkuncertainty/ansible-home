@@ -7,17 +7,70 @@ api-key: &api-key
     6562613834393736660a376163616239613932313038393866633134383261366662633665316132
     39633335316664336430646635353063623161623039656561343338633937306166393138393465
     6335306133396164323733386361316133643436383539323135
+taloscluster_state: &taloscluster_state 'absent'
+taloscluster_iso: &taloscluster_iso 'local:iso/talos-amd64-v1.5.1.iso,media=cdrom'
 vms: 
   - name: loadbalancer3
     node: proxmox3
     api_token: *api-key
     id: 108
+  - name: talos-m1-a
+    node: proxmox1
+    api_token: *api-key
+    memory: 2048
+    disk1: 'local-lvm:50,format=raw'
+    disk2: 'local-lvm:100,format=raw'
+    cd1: *taloscluster_iso
+    cpu: 'host'
+    id: 201
+    state: *taloscluster_state
+  - name: talos-m2-a
+    node: proxmox2
+    api_token: *api-key
+    memory: 2048
+    disk1: 'local-lvm:50,format=raw'
+    disk2: 'local-lvm:100,format=raw'
+    cd1: *taloscluster_iso
+    cpu: 'host'
+    id: 202
+    state: *taloscluster_state
   - name: talos-m3-a
     node: proxmox3
     api_token: *api-key
     memory: 2048
     disk1: 'local-lvm:50,format=raw'
     disk2: 'local-lvm:100,format=raw'
-    cd1: 'local:iso/talos-amd64-v1.4.4.iso,media=cdrom'
+    cd1: *taloscluster_iso
     cpu: 'host'
     id: 203
+    state: *taloscluster_state
+  - name: talos-w1-a
+    node: proxmox1
+    api_token: *api-key
+    memory: 2048
+    disk1: 'local-lvm:50,format=raw'
+    disk2: 'local-lvm:100,format=raw'
+    cd1: *taloscluster_iso
+    cpu: 'host'
+    id: 211
+    state: *taloscluster_state
+  - name: talos-w2-a
+    node: proxmox2
+    api_token: *api-key
+    memory: 2048
+    disk1: 'local-lvm:50,format=raw'
+    disk2: 'local-lvm:100,format=raw'
+    cd1: *taloscluster_iso
+    cpu: 'host'
+    id: 212
+    state: *taloscluster_state
+  - name: talos-w3-a
+    node: proxmox3
+    api_token: *api-key
+    memory: 2048
+    disk1: 'local-lvm:50,format=raw'
+    disk2: 'local-lvm:100,format=raw'
+    cd1: *taloscluster_iso
+    cpu: 'host'
+    id: 213
+    state: *taloscluster_state
