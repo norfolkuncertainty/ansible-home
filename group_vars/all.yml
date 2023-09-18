@@ -7,7 +7,7 @@ api-key: &api-key
     6562613834393736660a376163616239613932313038393866633134383261366662633665316132
     39633335316664336430646635353063623161623039656561343338633937306166393138393465
     6335306133396164323733386361316133643436383539323135
-taloscluster_state: &taloscluster_state 'absent'
+taloscluster_state: &taloscluster_state 'present'
 taloscluster_iso: &taloscluster_iso 'local:iso/talos-amd64-v1.5.1.iso,media=cdrom'
 vms: 
   - name: loadbalancer3
@@ -19,7 +19,6 @@ vms:
     api_token: *api-key
     memory: 2048
     disk1: 'local-lvm:50,format=raw'
-    disk2: 'local-lvm:100,format=raw'
     cd1: *taloscluster_iso
     cpu: 'host'
     id: 201
@@ -29,7 +28,6 @@ vms:
     api_token: *api-key
     memory: 2048
     disk1: 'local-lvm:50,format=raw'
-    disk2: 'local-lvm:100,format=raw'
     cd1: *taloscluster_iso
     cpu: 'host'
     id: 202
@@ -39,7 +37,6 @@ vms:
     api_token: *api-key
     memory: 2048
     disk1: 'local-lvm:50,format=raw'
-    disk2: 'local-lvm:100,format=raw'
     cd1: *taloscluster_iso
     cpu: 'host'
     id: 203
