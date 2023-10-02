@@ -7,67 +7,73 @@ api-key: &api-key
     6562613834393736660a376163616239613932313038393866633134383261366662633665316132
     39633335316664336430646635353063623161623039656561343338633937306166393138393465
     6335306133396164323733386361316133643436383539323135
-taloscluster_state: &taloscluster_state 'present'
-taloscluster_iso: &taloscluster_iso 'local:iso/talos-amd64-v1.5.1.iso,media=cdrom'
+taloscluster_a_state: &taloscluster_a_state 'present'
+taloscluster_a_iso: &taloscluster_a_iso 'local:iso/talos-amd64-v1.5.1.iso,media=cdrom'
+taloscluster_a_work_mem: &taloscluster_a_work_mem 2048
+taloscluster_a_cp_mem: &taloscluster_a_cp_mem 4096
 vms: 
+  - name: wireguard1
+    node: proxmox3
+    api_token: *api-key
+    id: 300
   - name: loadbalancer3
     node: proxmox3
     api_token: *api-key
     id: 108
-  - name: talos-m1-a
+  - name: talos-a-cp1
     node: proxmox1
     api_token: *api-key
-    memory: 2048
+    memory: *taloscluster_a_cp_mem
     disk1: 'local-lvm:50,format=raw'
-    cd1: *taloscluster_iso
+    cd1: *taloscluster_a_iso
     cpu: 'host'
     id: 201
-    state: *taloscluster_state
-  - name: talos-m2-a
+    state: *taloscluster_a_state
+  - name: talos-a-cp2
     node: proxmox2
     api_token: *api-key
-    memory: 2048
+    memory: *taloscluster_a_cp_mem
     disk1: 'local-lvm:50,format=raw'
-    cd1: *taloscluster_iso
+    cd1: *taloscluster_a_iso
     cpu: 'host'
     id: 202
-    state: *taloscluster_state
-  - name: talos-m3-a
+    state: *taloscluster_a_state
+  - name: talos-a-cp3
     node: proxmox3
     api_token: *api-key
-    memory: 2048
+    memory: *taloscluster_a_cp_mem
     disk1: 'local-lvm:50,format=raw'
-    cd1: *taloscluster_iso
+    cd1: *taloscluster_a_iso
     cpu: 'host'
     id: 203
-    state: *taloscluster_state
-  - name: talos-w1-a
+    state: *taloscluster_a_state
+  - name: talos-a-w1
     node: proxmox1
     api_token: *api-key
-    memory: 2048
+    memory: *taloscluster_a_work_mem
     disk1: 'local-lvm:50,format=raw'
     disk2: 'local-lvm:100,format=raw'
-    cd1: *taloscluster_iso
+    cd1: *taloscluster_a_iso
     cpu: 'host'
     id: 211
-    state: *taloscluster_state
-  - name: talos-w2-a
+    state: *taloscluster_a_state
+  - name: talos-a-w2
     node: proxmox2
     api_token: *api-key
-    memory: 2048
+    memory: *taloscluster_a_work_mem
     disk1: 'local-lvm:50,format=raw'
     disk2: 'local-lvm:100,format=raw'
-    cd1: *taloscluster_iso
+    cd1: *taloscluster_a_iso
     cpu: 'host'
     id: 212
-    state: *taloscluster_state
-  - name: talos-w3-a
+    state: *taloscluster_a_state
+  - name: talos-a-w3
     node: proxmox3
     api_token: *api-key
-    memory: 2048
+    memory: *taloscluster_a_work_mem
     disk1: 'local-lvm:50,format=raw'
     disk2: 'local-lvm:100,format=raw'
-    cd1: *taloscluster_iso
+    cd1: *taloscluster_a_iso
     cpu: 'host'
     id: 213
-    state: *taloscluster_state
+    state: *taloscluster_a_state
