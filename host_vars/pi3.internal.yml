@@ -1,0 +1,2 @@
+pacman_mirrors:
+  - http://sg.mirror.archlinuxarm.org/$arch/$repo

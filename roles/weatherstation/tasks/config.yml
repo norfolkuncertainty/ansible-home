@@ -7,33 +7,6 @@
     group='root'
   become: true
 
-- name: Backup script
-  copy: 
-    src='files/backup.sh' 
-    dest='/usr/local/bin/backup.sh' 
-    mode='0755' 
-    owner='root' 
-    group='root'
-  become: true
-
-- name: Create Backup dir
-  file: 
-    path='/home/weewx/backup' 
-    state='directory' 
-    owner='weewx' 
-    group='weewx'
-  become: true
-
-- name: Backup cron job
-  cron: 
-    name='Backup weewx' 
-    user='weewx' 
-    job='/usr/local/bin/backup.sh' 
-    weekday='0' 
-    hour='1' 
-    minute='0'
-  become: true
-
 - name: systemd initscript for weewx
   copy: 
     src='files/weewx.service' 

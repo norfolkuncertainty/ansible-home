@@ -7,7 +7,7 @@ api-key: &api-key
     6562613834393736660a376163616239613932313038393866633134383261366662633665316132
     39633335316664336430646635353063623161623039656561343338633937306166393138393465
     6335306133396164323733386361316133643436383539323135
-taloscluster_a_state: &taloscluster_a_state 'present'
+taloscluster_a_state: &taloscluster_a_state 'absent'
 taloscluster_a_iso: &taloscluster_a_iso 'local:iso/talos-amd64-v1.5.1.iso,media=cdrom'
 taloscluster_a_work_mem: &taloscluster_a_work_mem 2048
 taloscluster_a_cp_mem: &taloscluster_a_cp_mem 4096
@@ -16,6 +16,13 @@ vms:
     node: proxmox3
     api_token: *api-key
     id: 300
+  - name: kubeinternal1
+    node: proxmox2
+    api_token: *api-key
+    memory: 4096
+    cd1: 'nas-iso:iso/ubuntu-22.04.3-live-server-amd64.iso,media=cdrom'
+    cpu: 'host'
+    id: 302
   - name: loadbalancer3
     node: proxmox3
     api_token: *api-key
