@@ -5,14 +5,30 @@ haproxy_front_ends:
   - name: ingress_https
     bind: "0.0.0.0:443"
     default_backend: "microk8s_https"
-  - name: ingress_6443"
+  - name: ingress_6443
     bind: "0.0.0.0:6443"
-    default_backend: "microk8s_https"
+    default_backend: "talos-a-cp"
 haproxy_back_ends:
   - name: microk8s_http
-    server: "kube04 192.168.1.134:80"
+    port: 80
+    servers: 
+      - "kube04 192.168.1.134"
   - name: microk8s_https
-    server: "kube04 192.168.1.134:443"
+    port: 443
+    servers: 
+      - "kube04 192.168.1.134"
+  - name: "talos-a-cp"
+    port: 6443
+    servers: 
+      - "talos-a-cp1 192.168.1.60"
+      - "talos-a-cp2 192.168.1.61"
+      - "talos-a-cp3 192.168.1.62"
+  - name: talos-a-workers_http
+    port: 80
+    servers: 
+      - "talos-a-w1 192.168.1.63"
+      - "talos-a-w2 192.168.1.64"
+      - "talos-a-w3 192.168.1.65"
 haproxy_mode: tcp
 keepalived_checks:
     - name: chk_haproxy

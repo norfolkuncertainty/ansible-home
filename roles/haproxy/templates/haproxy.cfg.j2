@@ -35,6 +35,7 @@ frontend {{ frontend.name }}
 
 {% for backend in haproxy_back_ends %}
 backend {{ backend.name }}
-  server {{ backend.server }}
-  
+{% for server in backend.servers %}
+  server {{ server }}:{{backend.port}} check
+{% endfor %}
 {% endfor %}
