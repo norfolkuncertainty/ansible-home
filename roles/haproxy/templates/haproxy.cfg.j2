@@ -27,9 +27,27 @@ defaults
   timeout tarpit 60s
 
 {% for frontend in haproxy_front_ends %}
+
 frontend {{ frontend.name }}
   bind {{ frontend.bind}}
+{% if  frontend.log_sni is defined%}
+  tcp-request content capture req.ssl_sni len 50
+  log-format "capture0: %[capture.req.hdr(0)]"
+{% endif %}
   default_backend {{ frontend.default_backend }}
+{% if frontend.acl is defined%}
+{% for acl in frontend.acl %}
+  acl {{ acl }}
+{% endfor %}
+{%endif %}
+{% if frontend.acl_use_backend is defined %}
+{% for use_backend in frontend.acl_use_backend %}
+  use_backend {{ use_backend}}
+{% endfor %}
+{%endif %}
+{% if frontend.inspectdelay is defined %}
+  tcp-request inspect-delay {{ frontend.inspectdelay }}
+{%endif %}
 
 {% endfor %}
 

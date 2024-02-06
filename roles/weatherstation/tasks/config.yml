@@ -16,6 +16,12 @@
   become: true
   register: initscript
 
+- name: enable cronie
+  service:
+    name: cronie
+    enabled: true
+    state: started
+
 - name: systemd reload
   shell: 'systemctl daemon-reload'
   become: true
