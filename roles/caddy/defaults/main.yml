@@ -1,0 +1,8 @@
+---
+caddy_domain_name: example.com
+caddy_key_type: p384
+caddy_uid: "5000"
+caddy_gid: "5000"
+caddy_version: "2.7.6"
+caddy_letsencrypt_staging: false
+caddy_reverse_proxy: localhost:8080

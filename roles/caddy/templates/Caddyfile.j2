@@ -1,0 +1,28 @@
+{
+	admin off
+{% if caddy_letsencrypt_staging == true %}
+	acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+{% endif %}
+}
+
+{{ caddy_domain_name }} {
+	tls {
+		key_type {{ caddy_key_type }}
+        dns gandi {env.GANDI_API_TOKEN}
+	}
+	log {
+		output file /var/log/caddy/access.log {
+			roll_size 1gb
+			roll_keep 5
+			roll_keep_for 720h
+		}
+		format json
+	}
+
+	reverse_proxy {{ caddy_reverse_proxy }} {
+		transport http {
+            tls
+            tls_insecure_skip_verify
+        }
+    }
+}

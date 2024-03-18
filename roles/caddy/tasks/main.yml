@@ -1,0 +1,67 @@
+---
+#Tasks for Caddy Role
+
+- name: Create Caddy group
+  group:
+    name: caddy
+    gid: "{{ caddy_gid }}"
+
+- name: Create Caddy user
+  user:
+    name: caddy
+    comment: "Caddy User"
+    uid: "{{ caddy_uid }}"
+    group: caddy
+
+- name: Create dirs
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: root
+    group: caddy
+    mode: 0770
+  loop:
+    - /etc/caddy
+    - /var/log/caddy
+
+- name: Install Caddy
+  copy:
+    src: "../../bin/caddy-{{ caddy_version }}"
+    dest: /usr/bin/caddy
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Add Caddy Config file
+  template:
+    src: Caddyfile.j2
+    dest: /etc/caddy/Caddyfile
+    owner: root
+    group: caddy
+    mode: 0640
+  notify: restart_caddy
+
+- name: Add Caddy environment file
+  template:
+    src: caddyenv.j2
+    dest: /home/caddy/caddyenv
+    owner: caddy
+    group: caddy
+    mode: 0640
+  notify: restart_caddy
+
+- name: Add Caddy systemd Unit file
+  copy:
+    src: caddy.service
+    dest: /etc/systemd/system/caddy.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart_caddy
+
+- name: Start and enable Caddy
+  systemd:
+    name: caddy
+    state: started
+    enabled: true
+    daemon_reload: true
