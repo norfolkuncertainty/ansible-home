@@ -1,3 +1,4 @@
+#Main config
 {
 	admin off
 {% if caddy_letsencrypt_staging == true %}
@@ -5,9 +6,10 @@
 {% endif %}
 }
 
-{{ caddy_domain_name }} {
+{% for domain in caddy_domains %}
+{{ domain.name }} {
 	tls {
-		key_type {{ caddy_key_type }}
+		key_type p384
         dns gandi {env.GANDI_API_TOKEN}
 	}
 	log {
@@ -18,11 +20,26 @@
 		}
 		format json
 	}
-
-	reverse_proxy {{ caddy_reverse_proxy }} {
+	reverse_proxy {{ domain.reverse_proxy }} {
 		transport http {
             tls
             tls_insecure_skip_verify
         }
+{% if domain.health_uri is defined %}		
+		health_uri {{ domain.health_uri }}
+		health_port {{ domain.health_port }}
+{% endif %}
+		lb_policy cookie
     }
+}
+
+{% endfor %}
+
+metrics.i.davenull.co.nz {
+        metrics
+        tls {
+                key_type p384
+        		dns gandi {env.GANDI_API_TOKEN}
+        }
+
 }

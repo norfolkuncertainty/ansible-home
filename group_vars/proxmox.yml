@@ -8,9 +8,13 @@ GANDI_API_TOKEN: !vault |
   3832376233353466630a366161366362633064326135306566316130386636653332356138623965
   31326234613537326666653434643036636131623764363465333764313164633236343364306431
   6437376131633937333763326637323539303534346339646265
-caddy_domain_name: proxmox.i.davenull.co.nz
-caddy_reverse_proxy: 192.168.1.123:8006
-caddy_letsencrypt_staging: true
+caddy_domains: 
+  - name: proxmox.i.davenull.co.nz
+    reverse_proxy: 192.168.1.123:8006 192.168.1.80:8006 192.168.1.135:8006
+    health_uri: /
+    health_port: 8006
+  - name: ha.davenull.co.nz
+    reverse_proxy: 192.168.1.173:443
 keepalived_checks:
     - name: chk_caddy
       script: "pidof caddy"
