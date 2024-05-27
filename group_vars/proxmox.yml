@@ -13,8 +13,12 @@ caddy_domains:
     reverse_proxy: 192.168.1.123:8006 192.168.1.80:8006 192.168.1.135:8006
     health_uri: /
     health_port: 8006
+  - name: nas.i.davenull.co.nz
+    reverse_proxy: 192.168.1.246:443
   - name: ha.davenull.co.nz
     reverse_proxy: 192.168.1.173:443
+  - name: "*.davenull.co.nz"
+    reverse_proxy: 192.168.1.134:443  
 keepalived_checks:
     - name: chk_caddy
       script: "pidof caddy"
