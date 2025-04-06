@@ -10,7 +10,10 @@
 {{ domain.name }} {
 	tls {
 		key_type p384
-        dns gandi {env.GANDI_API_TOKEN}
+        dns porkbun {
+			api_key {env.PORKBUN_API_KEY}
+			api_secret_key {env.PORKBUN_API_SECRET_KEY}
+		} 
 	}
 	log {
 		output file /var/log/caddy/access.log {
@@ -39,7 +42,10 @@ metrics.i.davenull.co.nz {
         metrics
         tls {
                 key_type p384
-        		dns gandi {env.GANDI_API_TOKEN}
+        		dns porkbun {
+					api_key {env.PORKBUN_API_KEY}
+					api_secret_key {env.PORKBUN_API_SECRET_KEY}
+				}
         }
 
 }

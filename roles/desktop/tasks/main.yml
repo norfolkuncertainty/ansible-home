@@ -1,4 +1,4 @@
 ---
 # tasks file for desktop
-- include: packages.yml
-- include: services.yml
+- include_tasks: packages.yml
+- include_tasks: services.yml

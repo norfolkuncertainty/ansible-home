@@ -1,0 +1,2 @@
+[proxmox]
+proxmox1.d.davenull.co.nz ansible_user=root

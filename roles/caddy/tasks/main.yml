@@ -26,7 +26,7 @@
 
 - name: Install Caddy
   copy:
-    src: "../../bin/caddy-{{ caddy_version }}"
+    src: "caddy-{{ caddy_version }}"
     dest: /usr/bin/caddy
     owner: root
     group: root
