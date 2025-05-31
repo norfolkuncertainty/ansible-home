@@ -1,0 +1,13 @@
+- hosts: proxmox
+  roles:
+    - caddy
+    - keepalived
+- hosts: weather
+  roles:
+    - base
+    - weatherstation
+- hosts: lb_ingress
+  roles:
+    - base
+    - haproxy
+    - keepalived

@@ -1,5 +1,4 @@
 *.retry
 hosts
-site.yml
 .vagrant
 bin

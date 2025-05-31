@@ -1,2 +1,5 @@
 [proxmox]
 proxmox1.d.davenull.co.nz ansible_user=root
+
+[weather]
+weather.d.davenull.co.nz

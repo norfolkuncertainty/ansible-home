@@ -1,5 +1,5 @@
 ---
 # tasks file for weatherstation
-- include: python.yml
-- include: config.yml
-- include: user.yml
+- include_tasks: python.yml
+- include_tasks: config.yml
+- include_tasks: user.yml

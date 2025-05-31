@@ -1,14 +1,14 @@
 #Main config
 {
-	admin off
+  admin off
 {% if caddy_letsencrypt_staging == true %}
-	acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+  acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
 {% endif %}
 }
 
 {% for domain in caddy_domains %}
 {{ domain.name }} {
-	tls {
+  tls {
 		key_type p384
         dns porkbun {
 			api_key {env.PORKBUN_API_KEY}
@@ -25,27 +25,30 @@
 	}
 	reverse_proxy {{ domain.reverse_proxy }} {
 		transport http {
-            tls
-            tls_insecure_skip_verify
-        }
+      tls
+{% if domain.insecure is defined and domain.insecure == true %}		
+      tls_insecure_skip_verify
+{% endif %}
+{% if domain.tls_server_name is defined %}		
+      tls_server_name {{ domain.tls_server_name }}
+{% endif %}
+    }
 {% if domain.health_uri is defined %}		
 		health_uri {{ domain.health_uri }}
 		health_port {{ domain.health_port }}
 {% endif %}
 		lb_policy cookie
-    }
+  }
 }
-
 {% endfor %}
 
 metrics.i.davenull.co.nz {
-        metrics
-        tls {
-                key_type p384
-        		dns porkbun {
-					api_key {env.PORKBUN_API_KEY}
-					api_secret_key {env.PORKBUN_API_SECRET_KEY}
-				}
-        }
-
+  metrics
+  tls {
+    key_type p384
+    dns porkbun {
+			api_key {env.PORKBUN_API_KEY}
+			api_secret_key {env.PORKBUN_API_SECRET_KEY}
+		}
+  }
 }
