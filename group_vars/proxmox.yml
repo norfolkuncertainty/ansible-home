@@ -26,21 +26,28 @@ caddy_domains:
     health_uri: /
     health_port: 8006
     insecure: true
+    remote_ip: 192.168.1.0/24
   - name: nas.i.davenull.co.nz
     reverse_proxy: 192.168.1.246:443
     insecure: true
+    remote_ip: 192.168.1.0/24
   - name: unifi.i.davenull.co.nz
     reverse_proxy: 192.168.1.128:8443
     insecure: true
+    remote_ip: 192.168.1.0/24
   - name: ha.davenull.co.nz
     reverse_proxy: 192.168.1.173:443
+    insecure: true
     tls_server_name: ha.davenull.co.nz
+    remote_ip: 0.0.0.0/0
   - name: "*.davenull.co.nz"
     reverse_proxy: 192.168.1.134:443  
     insecure: true
+    remote_ip: 0.0.0.0/0
   - name: "*.i.davenull.co.nz"
     reverse_proxy: 192.168.1.181:443  
     insecure: true
+    remote_ip: 192.168.1.0/24
 keepalived_checks:
     - name: chk_caddy
       script: "pidof caddy"

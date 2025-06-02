@@ -8,6 +8,7 @@
 
 {% for domain in caddy_domains %}
 {{ domain.name }} {
+  @allowed remote_ip {{ domain.remote_ip}}
   tls {
 		key_type p384
         dns porkbun {
@@ -23,27 +24,39 @@
 		}
 		format json
 	}
-	reverse_proxy {{ domain.reverse_proxy }} {
-		transport http {
-      tls
+	handle @allowed {
+	  reverse_proxy {{ domain.reverse_proxy }} {
+	  	transport http {
+          tls
 {% if domain.insecure is defined and domain.insecure == true %}		
-      tls_insecure_skip_verify
+          tls_insecure_skip_verify
 {% endif %}
 {% if domain.tls_server_name is defined %}		
-      tls_server_name {{ domain.tls_server_name }}
+          tls_server_name {{ domain.tls_server_name }}
 {% endif %}
-    }
+        }
 {% if domain.health_uri is defined %}		
 		health_uri {{ domain.health_uri }}
 		health_port {{ domain.health_port }}
 {% endif %}
 		lb_policy cookie
-  }
+	  }
+    }
+	handle {
+		respond "Access denied" 403
+	}
 }
 {% endfor %}
 
 metrics.i.davenull.co.nz {
-  metrics
+  @allowed remote_ip 192.168.1.0/24
+  handle_path / @allowed_ips {
+    metrics
+  }
+  handle_path / {
+        respond "Forbidden" 403
+  }
+
   tls {
     key_type p384
     dns porkbun {
