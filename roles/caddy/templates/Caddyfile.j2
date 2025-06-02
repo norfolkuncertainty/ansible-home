@@ -49,12 +49,13 @@
 {% endfor %}
 
 metrics.i.davenull.co.nz {
-  @allowed remote_ip 192.168.1.0/24
-  handle_path / @allowed_ips {
+  @allowed remote_ip 192.168.1.0/24 
+  
+  handle @allowed {
     metrics
   }
-  handle_path / {
-        respond "Forbidden" 403
+  handle {
+        respond "Access Denied" 403
   }
 
   tls {
